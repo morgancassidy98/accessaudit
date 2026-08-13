@@ -35,6 +35,7 @@ const statusBadge = (status: string) => {
 
 export function AuditTable({ audits }: { audits: AuditWithStats[] }) {
   return (
+     <div className="table-responsive">
     <table className="table" aria-label="Audits list">
       <thead>
         <tr>
@@ -116,5 +117,6 @@ export function AuditTable({ audits }: { audits: AuditWithStats[] }) {
         ))}
       </tbody>
     </table>
+    </div>
   );
 }
