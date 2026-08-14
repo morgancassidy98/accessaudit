@@ -53,9 +53,9 @@ export default async function DashboardPage() {
       <div className="page-header">
         <div>
           <h1>Dashboard</h1>
-          <p className="text-muted text-small mt-2">
-            Manage and track your WCAG 2.1 AA accessibility audits
-          </p>
+          <p className="page-subtitle">
+  Manage and track your WCAG 2.1 AA accessibility audits
+        </p>
         </div>
         <Link href="/audit/new" className="btn btn-primary">
           + New Audit

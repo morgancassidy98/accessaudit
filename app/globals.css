@@ -66,7 +66,7 @@
 /* ── Reset ── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-html { font-size: 16px; -webkit-font-smoothing: antialiased; }
+html { font-size: 18px; -webkit-font-smoothing: antialiased; }
 
 body {
   font-family: var(--font-body);
@@ -138,7 +138,13 @@ input, select, textarea {
   z-index: 10;
 }
 
-.page-header h1 { font-size: 28px; }
+.page-header h1 { font-size: 30px; }
+
+.page-subtitle {
+  font-size: 15px;
+  color: #555;
+  margin-top: 4px;
+}
 
 .page-body {
   padding: 32px;
@@ -155,17 +161,17 @@ input, select, textarea {
 
 .sidebar-brand-name {
   font-family: var(--font-display);
-  font-size: 22px;
+  font-size: 24px;
   font-weight: var(--font-weight-semibold);
   color: #ffffff;
   letter-spacing: -0.01em;
 }
 
 .sidebar-brand-tagline {
-  font-size: 12px;
-  color: rgba(255,255,255,0.55);
+  font-size: 13px;
+  color: rgba(255,255,255,0.7);
   letter-spacing: var(--letter-spacing-wide);
-  margin-top: 3px;
+  margin-top: 4px;
 }
 
 /* ── Sidebar Nav ── */
@@ -182,7 +188,7 @@ input, select, textarea {
   font-size: 12px;
   letter-spacing: var(--letter-spacing-widest);
   text-transform: uppercase;
-  color: rgba(255,255,255,0.4);
+  color: rgba(255,255,255,0.6);
   padding: 14px 8px 6px;
   font-weight: var(--font-weight-medium);
 }
@@ -193,8 +199,8 @@ input, select, textarea {
   gap: 12px;
   padding: 10px 14px;
   border-radius: var(--radius);
-  color: rgba(255,255,255,0.8);
-  font-size: 14px;
+  color: rgba(255,255,255,0.9);
+  font-size: 15px;
   font-weight: var(--font-weight-medium);
   letter-spacing: var(--letter-spacing-wide);
   transition: var(--transition);
@@ -225,8 +231,8 @@ input, select, textarea {
 .sidebar-footer {
   padding: 16px 20px;
   border-top: 1px solid rgba(255,255,255,0.08);
-  font-size: 12px;
-  color: rgba(255,255,255,0.4);
+  font-size: 13px;
+  color: rgba(255,255,255,0.6);
   letter-spacing: var(--letter-spacing-wide);
 }
 
@@ -241,9 +247,9 @@ input, select, textarea {
   color: #ffffff;
   border: none;
   border-radius: var(--radius);
-  width: 40px;
-  height: 40px;
-  font-size: 18px;
+  width: 44px;
+  height: 44px;
+  font-size: 20px;
   align-items: center;
   justify-content: center;
   box-shadow: var(--shadow-md);
@@ -267,11 +273,13 @@ input, select, textarea {
 }
 
 .card-header {
-  padding: 20px 24px;
+  padding: 22px 28px;
   border-bottom: 1px solid var(--color-border);
 }
 
-.card-body { padding: 24px; }
+.card-header h2 { font-size: 22px; }
+
+.card-body { padding: 28px; }
 
 /* ── Stat Grid ── */
 .stat-grid {
@@ -285,24 +293,24 @@ input, select, textarea {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
-  padding: 22px 24px;
+  padding: 28px;
   box-shadow: var(--shadow-sm);
 }
 
 .stat-card-value {
   font-family: var(--font-display);
-  font-size: 40px;
+  font-size: 52px;
   font-weight: var(--font-weight-semibold);
   color: var(--color-primary);
   line-height: 1;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 
 .stat-card-label {
-  font-size: 12px;
+  font-size: 13px;
   letter-spacing: var(--letter-spacing-widest);
   text-transform: uppercase;
-  color: #777;
+  color: #555;
   font-weight: var(--font-weight-medium);
 }
 
@@ -321,7 +329,7 @@ input, select, textarea {
 .badge-success { background: var(--color-success-light); color: #2d5a1e; }
 .badge-danger  { background: var(--color-danger-light);  color: #6e0d2a; }
 .badge-warning { background: var(--color-warning-light); color: #4a3a10; }
-.badge-neutral { background: #ebebeb; color: #555; }
+.badge-neutral { background: #e8e8e8; color: #444; }
 .badge-primary { background: var(--color-primary-light); color: var(--color-primary); }
 
 /* ── Buttons ── */
@@ -330,7 +338,7 @@ input, select, textarea {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 10px 22px;
+  padding: 11px 24px;
   border-radius: var(--radius);
   font-family: var(--font-body);
   font-size: 13px;
@@ -404,8 +412,8 @@ input, select, textarea {
   color: #ffffff;
 }
 
-.btn-sm  { padding: 7px 16px; font-size: 12px; }
-.btn-lg  { padding: 14px 30px; font-size: 14px; }
+.btn-sm  { padding: 8px 16px; font-size: 12px; }
+.btn-lg  { padding: 14px 32px; font-size: 14px; }
 .btn-icon {
   padding: 8px;
   border-radius: var(--radius);
@@ -416,11 +424,11 @@ input, select, textarea {
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
 }
 
 .form-label {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: var(--font-weight-medium);
   letter-spacing: var(--letter-spacing-widest);
   text-transform: uppercase;
@@ -428,7 +436,7 @@ input, select, textarea {
 }
 
 .form-input {
-  padding: 11px 14px;
+  padding: 12px 16px;
   border: 1px solid var(--color-border);
   border-radius: var(--radius);
   font-family: var(--font-body);
@@ -440,19 +448,20 @@ input, select, textarea {
   width: 100%;
 }
 
+.form-input::placeholder { color: #999; }
 .form-input:hover  { border-color: var(--color-border-hover); }
 .form-input:focus  {
   border-color: var(--color-primary);
   box-shadow: var(--focus-ring);
 }
 
-.form-helper { font-size: 13px; color: #777; line-height: 1.5; }
+.form-helper { font-size: 13px; color: #555; line-height: 1.5; }
 .form-error  { font-size: 13px; color: var(--color-danger); }
 
 /* ── Progress bar ── */
 .progress-bar {
   height: 7px;
-  background: #e4eaf0;
+  background: #dde4ec;
   border-radius: var(--radius-pill);
   overflow: hidden;
 }
@@ -472,7 +481,7 @@ input, select, textarea {
 .table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 14px;
+  font-size: 15px;
 }
 
 .table th {
@@ -480,50 +489,54 @@ input, select, textarea {
   letter-spacing: var(--letter-spacing-widest);
   text-transform: uppercase;
   font-weight: var(--font-weight-medium);
-  color: #777;
+  color: #555;
   text-align: left;
-  padding: 12px 16px;
+  padding: 14px 20px;
   border-bottom: 1px solid var(--color-border);
   white-space: nowrap;
 }
 
 .table td {
-  padding: 16px 16px;
+  padding: 18px 20px;
   border-bottom: 1px solid var(--color-border);
   vertical-align: middle;
-  font-size: 14px;
 }
 
 .table tr:last-child td { border-bottom: none; }
 .table tr:hover td { background: var(--color-ghost-hover); }
 
+/* ── Table responsive wrapper ── */
+.table-responsive {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
 /* ── Empty state ── */
 .empty-state {
   text-align: center;
   padding: 72px 32px;
-  color: #888;
 }
 
 .empty-state-icon {
   font-size: 52px;
   margin-bottom: 20px;
-  opacity: 0.35;
+  opacity: 0.3;
   display: block;
 }
 
 .empty-state h3 {
   font-family: var(--font-display);
-  font-size: 26px;
+  font-size: 28px;
   color: var(--color-on-light);
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 }
 
 .empty-state p {
-  font-size: 15px;
+  font-size: 16px;
   max-width: 340px;
   margin: 0 auto 28px;
   line-height: 1.7;
-  color: #888;
+  color: #555;
 }
 
 /* ── Utilities ── */
@@ -539,9 +552,9 @@ input, select, textarea {
   border-width: 0;
 }
 
-.text-muted    { color: #777; }
-.text-small    { font-size: 13px; }
-.text-xs       { font-size: 12px; }
+.text-muted    { color: #555; }
+.text-small    { font-size: 14px; }
+.text-xs       { font-size: 13px; }
 .text-center   { text-align: center; }
 .text-right    { text-align: right; }
 .font-medium   { font-weight: var(--font-weight-medium); }
@@ -588,6 +601,7 @@ input, select, textarea {
 .rounded-lg { border-radius: var(--radius-lg); }
 
 .border-bottom { border-bottom: 1px solid var(--color-border); }
+
 .divider {
   height: 1px;
   background: var(--color-border);
@@ -617,11 +631,11 @@ input, select, textarea {
   }
 
   .page-header {
-    padding: 16px 16px 16px 64px;
+    padding: 16px 16px 16px 72px;
   }
 
   .page-header h1 {
-    font-size: 22px;
+    font-size: 24px;
   }
 
   .page-body {
@@ -633,11 +647,12 @@ input, select, textarea {
     gap: 12px;
   }
 
-  .stat-card-value { font-size: 32px; }
+  .stat-card {
+    padding: 20px;
+  }
 
-  .table-responsive {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
+  .stat-card-value {
+    font-size: 40px;
   }
 
   .hide-mobile { display: none !important; }
@@ -653,8 +668,16 @@ input, select, textarea {
     padding: 16px;
   }
 
+  .stat-card-value {
+    font-size: 32px;
+  }
+
   .btn {
     font-size: 12px;
     padding: 9px 16px;
+  }
+
+  .page-header h1 {
+    font-size: 20px;
   }
 }
