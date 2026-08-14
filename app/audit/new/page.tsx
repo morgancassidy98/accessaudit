@@ -73,7 +73,7 @@ export default function NewAuditPage() {
       </div>
 
       <div className="page-body">
-        <div className="max-w-md">
+        <div className="w-full mx-auto">
           <div className="card">
             <div className="card-header">
               <h2>Audit Details</h2>
