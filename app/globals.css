@@ -155,7 +155,7 @@ input, select, textarea {
 
 /* ── Sidebar Brand ── */
 .sidebar-brand {
-  padding: 24px 20px 18px;
+  padding: 24px 20px 18px 68px;
   border-bottom: 1px solid rgba(255,255,255,0.08);
 }
 
@@ -723,6 +723,11 @@ input, select, textarea {
   }
 
   .hide-mobile { display: none !important; }
+}
+@media (min-width: 769px) {
+  .sidebar-brand {
+    padding: 24px 20px 18px 20px;
+  }
 }
 
 @media (max-width: 480px) {
