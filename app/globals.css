@@ -608,6 +608,73 @@ input, select, textarea {
   margin: 24px 0;
 }
 
+/* ── Audit List ── */
+.audit-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.audit-row {
+  padding: 22px 28px;
+  border-bottom: 1px solid var(--color-border);
+  transition: background var(--transition-fast);
+}
+
+.audit-row:last-child {
+  border-bottom: none;
+}
+
+.audit-row:hover {
+  background: var(--color-ghost-hover);
+}
+
+.audit-row-name {
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 3px;
+  color: var(--color-on-light);
+}
+
+.audit-row-url {
+  font-size: 14px;
+  color: #555;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 400px;
+}
+
+.audit-row-stats {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 16px;
+  align-items: center;
+}
+
+.audit-stat-label {
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #555;
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+
+@media (max-width: 480px) {
+  .audit-row {
+    padding: 18px 20px;
+  }
+
+  .audit-row-stats {
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+
+  .audit-row-url {
+    max-width: 200px;
+  }
+}
+
 /* ── Responsive ── */
 @media (max-width: 768px) {
   .sidebar {
@@ -681,3 +748,4 @@ input, select, textarea {
     font-size: 20px;
   }
 }
+

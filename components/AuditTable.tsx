@@ -1,6 +1,8 @@
 'use client';
 
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 type AuditWithStats = {
   id: string;
@@ -33,33 +35,88 @@ const statusBadge = (status: string) => {
   }
 };
 
+function DeleteButton({
+  auditId,
+  auditName,
+}: {
+  auditId: string;
+  auditName: string;
+}) {
+  const router = useRouter();
+  const [confirming, setConfirming] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const handleDelete = async () => {
+    setIsDeleting(true);
+    try {
+      await fetch(`/api/audits/${auditId}`, { method: 'DELETE' });
+      router.refresh();
+    } catch {
+      setIsDeleting(false);
+      setConfirming(false);
+    }
+  };
+
+  if (confirming) {
+    return (
+      <div className="flex gap-2 items-center">
+        <span className="text-muted" style={{ whiteSpace: 'nowrap' }}>
+          Delete?
+        </span>
+        <button
+          className="btn btn-danger btn-sm"
+          onClick={handleDelete}
+          disabled={isDeleting}
+          aria-busy={isDeleting}
+        >
+          {isDeleting ? '…' : 'Yes'}
+        </button>
+        <button
+          className="btn btn-ghost btn-sm"
+          onClick={() => setConfirming(false)}
+          disabled={isDeleting}
+        >
+          No
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <button
+      className="btn btn-ghost btn-sm"
+      onClick={() => setConfirming(true)}
+      aria-label={`Delete audit: ${auditName}`}
+      style={{ color: 'var(--color-danger)' }}
+    >
+      Delete
+    </button>
+  );
+}
+
 export function AuditTable({ audits }: { audits: AuditWithStats[] }) {
   return (
-     <div className="table-responsive">
-    <table className="table" aria-label="Audits list">
-      <thead>
-        <tr>
-          <th>Audit</th>
-          <th>Status</th>
-          <th>Progress</th>
-          <th>Pass Rate</th>
-          <th>Failures</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        {audits.map((audit) => (
-          <tr key={audit.id}>
-            <td>
-              <div style={{ fontWeight: 500, marginBottom: '2px' }}>
-                {audit.name}
-              </div>
-              <div className="text-muted text-small">{audit.url}</div>
-            </td>
-            <td>{statusBadge(audit.stats.status)}</td>
-            <td style={{ minWidth: '120px' }}>
+    <div className="audit-list">
+      {audits.map((audit) => (
+        <div key={audit.id} className="audit-row">
+
+          {/* Top row — name + status */}
+          <div className="flex justify-between items-center gap-4 mb-3">
+            <div style={{ minWidth: 0 }}>
+              <div className="audit-row-name">{audit.name}</div>
+              <div className="audit-row-url">{audit.url}</div>
+            </div>
+            <div className="flex-shrink-0">
+              {statusBadge(audit.stats.status)}
+            </div>
+          </div>
+
+          {/* Stats row */}
+          <div className="audit-row-stats">
+            <div className="audit-stat">
+              <div className="audit-stat-label">Progress</div>
               <div className="flex items-center gap-2">
-                <div className="progress-bar" style={{ flex: 1 }}>
+                <div className="progress-bar" style={{ flex: 1, minWidth: '80px' }}>
                   <div
                     className={`progress-bar-fill ${
                       audit.stats.progress === 100
@@ -71,28 +128,33 @@ export function AuditTable({ audits }: { audits: AuditWithStats[] }) {
                     style={{ width: `${audit.stats.progress}%` }}
                   />
                 </div>
-                <span className="text-small text-muted">
+                <span style={{ fontSize: '14px', color: '#555', flexShrink: 0 }}>
                   {audit.stats.progress}%
                 </span>
               </div>
-            </td>
-            <td>
+            </div>
+
+            <div className="audit-stat">
+              <div className="audit-stat-label">Pass Rate</div>
               {audit.stats.tested > 0 ? (
                 <span style={{
-                  color: audit.stats.passRate >= 90
-                    ? '#3a6b2a'
-                    : audit.stats.passRate >= 70
-                    ? '#5a4a1e'
-                    : 'var(--color-danger)',
+                  fontSize: '15px',
                   fontWeight: 500,
+                  color: audit.stats.passRate >= 90
+                    ? '#2d5a1e'
+                    : audit.stats.passRate >= 70
+                    ? '#4a3a10'
+                    : 'var(--color-danger)',
                 }}>
                   {audit.stats.passRate}%
                 </span>
               ) : (
                 <span className="text-muted">—</span>
               )}
-            </td>
-            <td>
+            </div>
+
+            <div className="audit-stat">
+              <div className="audit-stat-label">Failures</div>
               {audit.stats.failed > 0 ? (
                 <span className="badge badge-danger">
                   {audit.stats.failed} failed
@@ -102,21 +164,22 @@ export function AuditTable({ audits }: { audits: AuditWithStats[] }) {
               ) : (
                 <span className="text-muted">—</span>
               )}
-            </td>
-            <td>
-              <div className="flex gap-2">
-                <Link
-                  href={`/audit/${audit.id}`}
-                  className="btn btn-outline btn-sm"
-                >
-                  Open
-                </Link>
-              </div>
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
+            </div>
+          </div>
+
+          {/* Actions row */}
+          <div className="flex gap-2 items-center mt-4">
+            <Link
+              href={`/audit/${audit.id}`}
+              className="btn btn-outline btn-sm"
+            >
+              Open Audit
+            </Link>
+            <DeleteButton auditId={audit.id} auditName={audit.name} />
+          </div>
+
+        </div>
+      ))}
     </div>
   );
 }
