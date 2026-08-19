@@ -5,6 +5,7 @@ import { ChecklistNav } from '@/components/ChecklistNav';
 import { CriterionCard } from '@/components/CriterionCard';
 import Link from 'next/link';
 
+
 async function getPage(pid: string) {
   const page = await prisma.page.findUnique({
     where: { id: pid },

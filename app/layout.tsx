@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
-import { Sidebar } from '@/components/Sidebar';
+import { TopNav } from '@/components/TopNav';
 
 export const metadata: Metadata = {
   title: 'AccessAudit — WCAG Accessibility Auditing Tool',
@@ -16,7 +16,7 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <div className="app-shell">
-          <Sidebar />
+          <TopNav />
           <main className="main-content">
             {children}
           </main>
