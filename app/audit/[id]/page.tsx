@@ -29,7 +29,7 @@ export default async function AuditPage({
   const audit = await getAudit(id);
 
   // Compute per-page stats
-  const pagesWithStats = audit.pages.map((page) => {
+    const pagesWithStats = audit.pages.map((page) => {
     const passed  = page.results.filter((r) => r.status === 'pass').length;
     const failed  = page.results.filter((r) => r.status === 'fail').length;
     const na      = page.results.filter((r) => r.status === 'na').length;
@@ -72,6 +72,9 @@ export default async function AuditPage({
           <h1>{audit.name}</h1>
           <p className="page-subtitle">{audit.url}</p>
         </div>
+        <Link href={`/audit/${id}/report`} className="btn btn-outline">
+    View Report
+  </Link>
         <Link href="/" className="btn btn-outline flex-shrink-0">
           ← Back
         </Link>
