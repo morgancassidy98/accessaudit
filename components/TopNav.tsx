@@ -11,10 +11,6 @@ const navItems = [
 export function TopNav() {
   const pathname = usePathname();
 
-  // Hide on checklist pages
-  const isChecklist = pathname.includes('/page/');
-  if (isChecklist) return null;
-
   return (
     <header className="topnav" role="banner">
       <div className="topnav-inner">

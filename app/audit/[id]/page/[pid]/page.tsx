@@ -90,7 +90,7 @@ export default async function ChecklistPage({
           <div style={{ minWidth: 0 }}>
             <div style={{
               fontWeight: 500,
-              fontSize: '15px',
+              fontSize: '16px',
               overflow: 'hidden',
               textOverflow: 'ellipsis',
               whiteSpace: 'nowrap',
@@ -98,7 +98,7 @@ export default async function ChecklistPage({
               {page.title}
             </div>
             <div className="text-muted" style={{
-              fontSize: '13px',
+              fontSize: '14px',
               overflow: 'hidden',
               textOverflow: 'ellipsis',
               whiteSpace: 'nowrap',
@@ -117,14 +117,14 @@ export default async function ChecklistPage({
                 style={{ width: `${progress}%` }}
               />
             </div>
-            <span style={{ fontSize: '14px', color: '#555', flexShrink: 0 }}>
+            <span style={{ fontSize: '15px', color: '#444', flexShrink: 0 }}>
               {tested} / {wcagCriteria.length}
             </span>
           </div>
           <div className="flex gap-3 mt-1" style={{ justifyContent: 'flex-end' }}>
-            <span style={{ fontSize: '13px', color: '#2d5a1e' }}>✓ {passed}</span>
-            <span style={{ fontSize: '13px', color: '#6e0d2a' }}>✕ {failed}</span>
-            <span style={{ fontSize: '13px', color: '#555' }}>N/A {na}</span>
+            <span style={{ fontSize: '15px', color: '#2d5a1e' }}>✓ {passed}</span>
+            <span style={{ fontSize: '15px', color: '#6e0d2a' }}>✕ {failed}</span>
+            <span style={{ fontSize: '15px', color: '#444' }}>N/A {na}</span>
           </div>
         </div>
       </div>
