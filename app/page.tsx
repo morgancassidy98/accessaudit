@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { prisma } from '@/lib/prisma';
 import { wcagCriteria } from '@/lib/wcag-criteria';
 import { AuditTable } from '@/components/AuditTable';
+export const revalidate = 0;
 
 async function getAudits() {
   return prisma.audit.findMany({
