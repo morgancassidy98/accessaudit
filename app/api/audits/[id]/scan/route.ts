@@ -70,6 +70,7 @@ export async function POST(
               await prisma.result.update({
                 where: { id: result.id },
                 data: {
+                  status: 'fail',
                   automatedStatus: 'fail',
                   automatedSource: 'lighthouse',
                 },
