@@ -12,7 +12,7 @@ export async function POST(
     const { id } = await params;
     const { pageId, url } = await request.json();
 
-    const apiKey = process.env.PAGESPEED_API_KEY ?? '';
+    const apiKey = process.env.PAGESPEED_API_KEY ?? process.env.NEXT_PUBLIC_PAGESPEED_API_KEY ?? '';
     const apiUrl = `https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${encodeURIComponent(url)}&category=accessibility&strategy=mobile${apiKey ? `&key=${apiKey}` : ''}`;
 
     // Strict 9 second timeout to stay under Vercel's 10s limit
@@ -22,25 +22,34 @@ export async function POST(
     let lighthouseData = null;
     let score = null;
     let failedAudits: string[] = [];
+    let scanError: string | null = null;
 
     try {
       const lighthouseRes = await fetch(apiUrl, { signal: controller.signal });
       clearTimeout(timeout);
 
-      if (lighthouseRes.ok) {
-        const data = await lighthouseRes.json();
-        score = Math.round(
-          (data.lighthouseResult?.categories?.accessibility?.score ?? 0) * 100
-        );
-        lighthouseData = data.lighthouseResult?.audits ?? {};
-
-        failedAudits = Object.entries(lighthouseData)
-          .filter(([, audit]: [string, any]) => audit.score !== null && audit.score < 1)
-          .map(([auditId]) => auditId);
+      if (!lighthouseRes.ok) {
+        const errorBody = await lighthouseRes.json().catch(() => null);
+        const message = errorBody?.error?.message ?? `PageSpeed returned ${lighthouseRes.status}`;
+        scanError = message.includes('Quota exceeded') || lighthouseRes.status === 429
+          ? 'PageSpeed quota exceeded. Add a valid PAGESPEED_API_KEY to your .env.local (or .env) with billing enabled, then retry. The shared Google quota is exhausted.'
+          : message;
+        return NextResponse.json({ error: scanError }, { status: lighthouseRes.status });
       }
+
+      const data = await lighthouseRes.json();
+      score = Math.round(
+        (data.lighthouseResult?.categories?.accessibility?.score ?? 0) * 100
+      );
+      lighthouseData = data.lighthouseResult?.audits ?? {};
+
+      failedAudits = Object.entries(lighthouseData)
+        .filter(([, audit]: [string, any]) => audit.score !== null && audit.score < 1)
+        .map(([auditId]) => auditId);
     } catch (err) {
       clearTimeout(timeout);
-      // Lighthouse timed out or failed — continue with partial results
+      scanError = 'Lighthouse scan failed — the page may be blocked or the PageSpeed API is unavailable.';
+      return NextResponse.json({ error: scanError }, { status: 502 });
     }
 
     // Update page with whatever we got

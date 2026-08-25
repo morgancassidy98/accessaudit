@@ -275,10 +275,16 @@ function ScanButton({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ pageId, url: pageUrl }),
       });
-      if (!res.ok) throw new Error('Scan failed');
+
+      const data = await res.json().catch(() => null);
+      if (!res.ok) {
+        throw new Error(data?.error ?? 'Scan failed');
+      }
+
       router.refresh();
-    } catch {
-      onError('Scan failed — URL must be publicly accessible.');
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Scan failed — URL must be publicly accessible.';
+      onError(message);
       setIsScanning(false);
     }
   };
