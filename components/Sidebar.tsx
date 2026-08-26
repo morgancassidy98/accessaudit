@@ -55,8 +55,8 @@ export function Sidebar() {
         aria-label="Main navigation"
       >
         <div className="sidebar-brand">
-          <div className="sidebar-brand-name">AccessAudit</div>
-          <div className="sidebar-brand-tagline">WCAG 2.1 AA Auditing</div>
+          <div className="sidebar-brand-name">Audit Ally</div>
+          <div className="sidebar-brand-tagline">WCAG Accessibility Audit Tracker and Reporting Tool</div>
         </div>
 
         <nav className="sidebar-nav">
@@ -76,7 +76,7 @@ export function Sidebar() {
         </nav>
 
         <div className="sidebar-footer">
-          WCAG 2.1 AA · Section 508
+          WCAG Accessibility · Section 508
         </div>
       </aside>
     </>

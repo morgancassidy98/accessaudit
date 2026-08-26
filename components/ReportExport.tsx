@@ -204,7 +204,7 @@ const handleExport = async () => {
       doc.line(margin, pageHeight - 14, pageWidth - margin, pageHeight - 14);
       setStyle(8, [150, 150, 150]);
       doc.text(
-        `AccessAudit — WCAG 2.1 AA Report — ${audit.name}`,
+        `Audit Ally — WCAG Accessibility Report — ${audit.name}`,
         margin,
         pageHeight - 8
       );

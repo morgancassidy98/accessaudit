@@ -64,7 +64,7 @@ export default function NewAuditPage() {
         <div>
           <h1>New Audit</h1>
           <p className="page-subtitle">
-            Set up a new WCAG 2.1 AA accessibility audit
+            WCAG Accessibility Audit Tracker and Reporting Tool
           </p>
         </div>
         <Link href="/" className="btn btn-outline">

@@ -16,8 +16,8 @@ export function TopNav() {
       <div className="topnav-inner">
         <div className="topnav-brand">
           <Link href="/" className="topnav-brand-link">
-            <span className="topnav-brand-name">AccessAudit</span>
-            <span className="topnav-brand-tagline">WCAG 2.1 AA</span>
+            <span className="topnav-brand-name">Audit Ally</span>
+            <span className="topnav-brand-tagline">WCAG Accessibility Audit Tracker and Reporting Tool</span>
           </Link>
         </div>
 

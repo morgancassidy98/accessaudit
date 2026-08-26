@@ -3,8 +3,8 @@ import './globals.css';
 import { TopNav } from '@/components/TopNav';
 
 export const metadata: Metadata = {
-  title: 'AccessAudit — WCAG Accessibility Auditing Tool',
-  description: 'Guided WCAG 2.1 AA accessibility auditing with automated scanning, detailed reports, and exportable results.',
+  title: 'Audit Ally — WCAG Accessibility Audit Tracker and Reporting Tool',
+  description: 'Guided WCAG accessibility auditing with automated scanning, detailed reports, and exportable results.',
 };
 
 export default function RootLayout({

@@ -55,8 +55,8 @@ export default async function DashboardPage() {
         <div>
           <h1>Dashboard</h1>
           <p className="page-subtitle">
-  Manage and track your WCAG 2.1 AA accessibility audits
-        </p>
+            WCAG Accessibility Audit Tracker and Reporting Tool
+          </p>
         </div>
         <Link href="/audit/new" className="btn btn-primary">
           + New Audit
@@ -101,7 +101,7 @@ export default async function DashboardPage() {
               <h3>No audits yet</h3>
               <p>
                 Create your first audit to start checking a website for
-                WCAG 2.1 AA accessibility compliance.
+                WCAG accessibility compliance.
               </p>
               <Link href="/audit/new" className="btn btn-primary">
                 Create Your First Audit

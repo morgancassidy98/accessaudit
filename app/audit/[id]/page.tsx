@@ -139,7 +139,7 @@ export default async function AuditPage({
             <h2>Add a Page</h2>
             <p className="text-muted mt-2" style={{ fontSize: '14px' }}>
               Add each page you want to audit. Each page will have its own
-              guided checklist of {wcagCriteria.length} WCAG 2.1 AA criteria.
+              guided checklist of {wcagCriteria.length} WCAG accessibility criteria.
             </p>
           </div>
           <div className="card-body">
