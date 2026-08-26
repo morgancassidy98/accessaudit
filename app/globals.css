@@ -14,7 +14,7 @@
   --color-warning-light:   #faf5ea;
 
   --color-on-dark:         #ffffff;
-  --color-on-light:        #1a1a2e;
+  --color-on-light:        #1c1c1c;
   --color-on-secondary:    #1a3a52;
   --color-on-ghost:        #2D5D7B;
 
@@ -154,7 +154,7 @@ select.form-input {
 
 .topnav-brand-tagline {
   font-size: 13px;
-  color: rgba(255,255,255,0.65);
+  color: rgba(255,255,255,0.78);
   letter-spacing: var(--letter-spacing-wider);
   text-transform: uppercase;
 }
@@ -210,7 +210,7 @@ select.form-input {
 
 .page-subtitle {
   font-size: 15px;
-  color: #444;
+  color: #2f2f2f;
   margin-top: 4px;
 }
 
@@ -266,7 +266,7 @@ select.form-input {
   font-size: 14px;
   letter-spacing: var(--letter-spacing-widest);
   text-transform: uppercase;
-  color: #444;
+  color: #2f2f2f;
   font-weight: var(--font-weight-medium);
 }
 
@@ -285,7 +285,7 @@ select.form-input {
 .badge-success { background: var(--color-success-light); color: #2d5a1e; }
 .badge-danger  { background: var(--color-danger-light);  color: #6e0d2a; }
 .badge-warning { background: var(--color-warning-light); color: #4a3a10; }
-.badge-neutral { background: #e8e8e8; color: #444; }
+.badge-neutral { background: #e8e8e8; color: #2e2e2e; }
 .badge-primary { background: var(--color-primary-light); color: var(--color-primary); }
 
 /* ── Buttons ── */
@@ -376,8 +376,8 @@ select.form-input {
 
 .btn-neutral-active {
   background: #e8e8e8;
-  color: #444;
-  border-color: #ccc;
+  color: #2e2e2e;
+  border-color: #c5c5c5;
 }
 
 .btn-outline-active {
@@ -422,14 +422,14 @@ select.form-input {
   width: 100%;
 }
 
-.form-input::placeholder { color: #999; }
+.form-input::placeholder { color: #676767; }
 .form-input:hover  { border-color: var(--color-border-hover); }
 .form-input:focus  {
   border-color: var(--color-primary);
   box-shadow: var(--focus-ring);
 }
 
-.form-helper { font-size: 14px; color: #444; line-height: 1.5; }
+.form-helper { font-size: 14px; color: #2f2f2f; line-height: 1.5; }
 .form-error  { font-size: 14px; color: var(--color-danger); }
 
 /* ── Progress bar ── */
@@ -476,7 +476,7 @@ select.form-input {
   max-width: 340px;
   margin: 0 auto 28px;
   line-height: 1.7;
-  color: #555;
+  color: #3a3a3a;
 }
 
 /* ── Audit List ── */
@@ -503,7 +503,7 @@ select.form-input {
 
 .audit-row-url {
   font-size: 14px;
-  color: #555;
+  color: #3a3a3a;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -521,7 +521,7 @@ select.form-input {
   font-size: 12px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: #555;
+  color: #3a3a3a;
   font-weight: 500;
   margin-bottom: 6px;
 }
@@ -595,7 +595,7 @@ select.form-input {
 
 .checklist-progress-value {
   font-size: 15px;
-  color: #444;
+  color: #2e2e2e;
   flex-shrink: 0;
 }
 
@@ -614,7 +614,7 @@ select.form-input {
   padding: 6px 10px;
   font-size: 14px;
   line-height: 1.2;
-  color: #3d3016;
+  color: #2d2416;
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -648,7 +648,7 @@ select.form-input {
 
 .checklist-scan-text {
   font-size: 12px;
-  color: rgba(61,48,22,0.85);
+  color: rgba(35,28,17,0.9);
   white-space: nowrap;
 }
 
@@ -677,7 +677,7 @@ select.form-input {
   font-size: 11px;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: #666;
+  color: #4a4a4a;
   padding: 4px 10px 8px;
   border-bottom: 1px solid rgba(0,0,0,0.04);
   margin-bottom: 8px;
@@ -698,7 +698,7 @@ select.form-input {
   font-size: 14px;
   letter-spacing: var(--letter-spacing-widest);
   text-transform: uppercase;
-  color: #444;
+  color: #2f2f2f;
   font-weight: var(--font-weight-medium);
   padding: 10px 10px 4px;
   cursor: pointer;
@@ -711,7 +711,7 @@ select.form-input {
 .checklist-nav-group-caret {
   font-size: 16px;
   line-height: 1;
-  color: #666;
+  color: #4a4a4a;
 }
 
 .checklist-nav-group-items {
@@ -752,7 +752,7 @@ select.form-input {
 .checklist-nav-id {
   font-size: 14px;
   font-weight: var(--font-weight-medium);
-  color: #333;
+  color: #1f1f1f;
   flex-shrink: 0;
 }
 
@@ -803,7 +803,7 @@ select.form-input {
 
 .criterion-description {
   font-size: 16px;
-  color: #222;
+  color: #1e1e1e;
   line-height: 1.7;
 }
 
@@ -839,7 +839,7 @@ select.form-input {
   font-size: 13px;
   letter-spacing: var(--letter-spacing-widest);
   text-transform: uppercase;
-  color: #444;
+  color: #2f2f2f;
   font-weight: var(--font-weight-medium);
   margin-bottom: 12px;
   display: flex;
@@ -851,7 +851,7 @@ select.form-input {
   font-size: 13px;
   letter-spacing: 0;
   text-transform: none;
-  color: #666;
+  color: #4a4a4a;
   font-weight: var(--font-weight-light);
 }
 
@@ -910,7 +910,7 @@ select.form-input {
 .criterion-step-text {
   flex: 1;
   font-size: 15px;
-  color: #222;
+  color: #1d1d1d;
   line-height: 1.7;
 }
 
@@ -994,7 +994,7 @@ select.form-input {
   font-size: 14px;
   letter-spacing: var(--letter-spacing-widest);
   text-transform: uppercase;
-  color: #444;
+  color: #2f2f2f;
   margin-top: 4px;
 }
 
@@ -1025,7 +1025,7 @@ select.form-input {
   border-width: 0;
 }
 
-.text-muted    { color: #444; }
+.text-muted    { color: #2f2f2f; }
 .text-small    { font-size: 15px; }
 .text-xs       { font-size: 14px; }
 .text-center   { text-align: center; }

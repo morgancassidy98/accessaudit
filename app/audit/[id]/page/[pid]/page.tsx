@@ -145,7 +145,7 @@ export default async function ChecklistPage({
             <div className="checklist-progress-meta">
               <span style={{ color: '#2d5a1e' }}>✓ {passed}</span>
               <span style={{ color: '#6e0d2a' }}>✕ {failed}</span>
-              <span style={{ color: '#444' }}>N/A {na}</span>
+              <span style={{ color: '#2f2f2f' }}>N/A {na}</span>
             </div>
           </div>
         </div>

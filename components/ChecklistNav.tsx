@@ -14,9 +14,9 @@ type Result = {
 const statusIcon = (status: string, automatedStatus: string | null) => {
   if (status === 'pass')    return { icon: '✓', color: '#2d5a1e' };
   if (status === 'fail')    return { icon: '✕', color: '#6e0d2a' };
-  if (status === 'na')      return { icon: '—', color: '#555' };
+  if (status === 'na')      return { icon: '—', color: '#3b3b3b' };
   if (automatedStatus === 'fail') return { icon: '!', color: '#7b652d' };
-  return { icon: '○', color: '#aaa' };
+  return { icon: '○', color: '#6b6b6b' };
 };
 
 const principles = ['Perceivable', 'Operable', 'Understandable', 'Robust'] as const;
