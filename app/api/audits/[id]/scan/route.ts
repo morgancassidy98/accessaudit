@@ -15,9 +15,10 @@ export async function POST(
     const apiKey = process.env.PAGESPEED_API_KEY ?? process.env.NEXT_PUBLIC_PAGESPEED_API_KEY ?? '';
     const apiUrl = `https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${encodeURIComponent(url)}&category=accessibility&strategy=mobile${apiKey ? `&key=${apiKey}` : ''}`;
 
-    // Strict 9 second timeout to stay under Vercel's 10s limit
+    // Use a slightly longer timeout than the previous 9s to avoid aborting slow
+    // PageSpeed responses while still keeping the request bounded.
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 9000);
+    const timeout = setTimeout(() => controller.abort(), 15000);
 
     let lighthouseData = null;
     let score = null;
@@ -31,9 +32,10 @@ export async function POST(
       if (!lighthouseRes.ok) {
         const errorBody = await lighthouseRes.json().catch(() => null);
         const message = errorBody?.error?.message ?? `PageSpeed returned ${lighthouseRes.status}`;
+        const reason = errorBody?.error?.errors?.[0]?.reason ?? null;
         scanError = message.includes('Quota exceeded') || lighthouseRes.status === 429
-          ? 'PageSpeed quota exceeded. Add a valid PAGESPEED_API_KEY to your .env.local (or .env) with billing enabled, then retry. The shared Google quota is exhausted.'
-          : message;
+          ? `PageSpeed quota exceeded: ${message}${reason ? ` (${reason})` : ''}. Add a valid PAGESPEED_API_KEY to your .env.local (or .env) with billing enabled, then retry.`
+          : `${message}${reason ? ` (${reason})` : ''}`;
         return NextResponse.json({ error: scanError }, { status: lighthouseRes.status });
       }
 
@@ -48,7 +50,11 @@ export async function POST(
         .map(([auditId]) => auditId);
     } catch (err) {
       clearTimeout(timeout);
-      scanError = 'Lighthouse scan failed — the page may be blocked or the PageSpeed API is unavailable.';
+      const message = err instanceof Error ? err.message : 'Unknown error';
+      const isAbort = message === 'This operation was aborted' || err instanceof DOMException && err.name === 'AbortError';
+      scanError = isAbort
+        ? 'Lighthouse scan timed out after 15 seconds. The page may be slow to load, blocked, or the PageSpeed API may be delayed or unavailable.'
+        : `Lighthouse scan failed — the page may be blocked or the PageSpeed API is unavailable. Details: ${message}`;
       return NextResponse.json({ error: scanError }, { status: 502 });
     }
 
@@ -63,32 +69,43 @@ export async function POST(
       },
     });
 
-    // Map failed Lighthouse audits to WCAG criteria
-    if (failedAudits.length > 0) {
-      const page = await prisma.page.findUnique({
-        where: { id: pageId },
-        include: { results: true },
-      });
+ // Map failed Lighthouse audits to WCAG criteria
 
-      if (page) {
-        for (const auditId of failedAudits) {
-          const criterionIds = lighthouseAuditMap[auditId] ?? [];
-          for (const criterionId of criterionIds) {
-            const result = page.results.find((r) => r.criterionId === criterionId);
-            if (result && result.status === 'untested') {
-              await prisma.result.update({
-                where: { id: result.id },
-                data: {
-                  status: 'fail',
-                  automatedStatus: 'fail',
-                  automatedSource: 'lighthouse',
-                },
-              });
-            }
-          }
+
+  if (lighthouseData) {
+  const page = await prisma.page.findUnique({
+    where: { id: pageId },
+    include: { results: true },
+  });
+
+  if (page) {
+    const scoredAudits = Object.entries(lighthouseData)
+      .filter(([, audit]: [string, any]) => audit.score !== null)
+      .map(([auditId, audit]: [string, any]) => ({
+        auditId,
+        passed: (audit.score as number) >= 1,
+      }));
+
+    for (const { auditId, passed } of scoredAudits) {
+      const criterionIds = lighthouseAuditMap[auditId] ?? [];
+      for (const criterionId of criterionIds) {
+        const result = page.results.find((r) => r.criterionId === criterionId);
+        if (result && result.status === 'untested') {
+          await prisma.result.update({
+            where: { id: result.id },
+            data: {
+              status: passed ? 'pass' : 'fail',
+              automatedStatus: passed ? 'pass' : 'fail',
+              automatedSource: 'lighthouse',
+            },
+          });
         }
       }
     }
+  }
+}
+
+  
 
     return NextResponse.json({
       score,

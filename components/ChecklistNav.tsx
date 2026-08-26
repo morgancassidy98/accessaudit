@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
 import type { Criterion } from '@/lib/wcag-criteria';
 
@@ -33,60 +34,88 @@ export function ChecklistNav({
   auditId: string;
   pageId: string;
 }) {
+  const [collapsedGroups, setCollapsedGroups] = useState<Record<string, boolean>>({});
+
+  const toggleGroup = (principle: string) => {
+    setCollapsedGroups((current) => ({
+      ...current,
+      [principle]: !current[principle],
+    }));
+  };
+
   return (
     <nav
       className="checklist-nav"
       aria-label="WCAG criteria navigation"
     >
+      <div className="checklist-nav-scroll-hint" aria-hidden="true">
+        <span>↓</span>
+        <span>Scroll for more criteria</span>
+      </div>
+
       {principles.map((principle) => {
         const group = criteria.filter((c) => c.principle === principle);
         if (group.length === 0) return null;
 
+        const isCollapsed = collapsedGroups[principle] ?? false;
+
         return (
           <div key={principle} className="checklist-nav-group">
-            <div className="checklist-nav-group-label">
-              {principle}
-            </div>
-            {group.map((criterion) => {
-              const result = results[criterion.id];
-              const { icon, color } = statusIcon(
-                result?.status ?? 'untested',
-                result?.automatedStatus ?? null
-              );
-              const isActive = criterion.id === activeCriterionId;
-              const isAutomated = result?.automatedStatus === 'fail';
+            <button
+              type="button"
+              className="checklist-nav-group-label checklist-nav-group-toggle"
+              onClick={() => toggleGroup(principle)}
+              aria-expanded={!isCollapsed}
+              aria-label={`${isCollapsed ? 'Expand' : 'Collapse'} ${principle} section`}
+            >
+              <span>{principle}</span>
+              <span className="checklist-nav-group-caret">{isCollapsed ? '▸' : '▾'}</span>
+            </button>
 
-              return (
-                <Link
-                  key={criterion.id}
-                  href={`/audit/${auditId}/page/${pageId}?criterion=${criterion.id}`}
-                  className={`checklist-nav-item ${isActive ? 'active' : ''}`}
-                  aria-current={isActive ? 'true' : undefined}
-                >
-                  <span
-                    className="checklist-nav-status"
-                    style={{ color }}
-                    aria-hidden="true"
-                  >
-                    {icon}
-                  </span>
-                  <span className="checklist-nav-id">
-                    {criterion.id}
-                  </span>
-                  <span className="checklist-nav-title">
-                    {criterion.title}
-                  </span>
-                  {isAutomated && result?.status === 'untested' && (
-                    <span
-                      className="checklist-nav-flag"
-                      aria-label="Automated flag"
+            {!isCollapsed && (
+              <div className="checklist-nav-group-items">
+                {group.map((criterion) => {
+                  const result = results[criterion.id];
+                  const { icon, color } = statusIcon(
+                    result?.status ?? 'untested',
+                    result?.automatedStatus ?? null
+                  );
+                  const isActive = criterion.id === activeCriterionId;
+                  const isAutomated = result?.automatedStatus === 'fail';
+
+                  return (
+                    <Link
+                      key={criterion.id}
+                      href={`/audit/${auditId}/page/${pageId}?criterion=${criterion.id}`}
+                      className={`checklist-nav-item ${isActive ? 'active' : ''}`}
+                      aria-current={isActive ? 'true' : undefined}
                     >
-                      ⚡
-                    </span>
-                  )}
-                </Link>
-              );
-            })}
+                      <span
+                        className="checklist-nav-status"
+                        style={{ color }}
+                        aria-hidden="true"
+                      >
+                        {icon}
+                      </span>
+                      <span className="checklist-nav-id">
+                        {criterion.id}
+                      </span>
+                      <span className="checklist-nav-title">
+                        {criterion.title}
+                      </span>
+                      {isAutomated && result?.status === 'untested' && (
+                        <span
+                          className="checklist-nav-flag"
+                          aria-label="Automated flag"
+                        >
+                          ⚡
+                        </span>
+                      )}
+                    </Link>
+                  );
+                })}
+              </div>
+            )}
           </div>
         );
       })}

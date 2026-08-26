@@ -157,7 +157,7 @@ export function CriterionCard({
             {criterion.guideline}
           </span>
           <span style={{ fontSize: '13px', color: '#aaa' }}>·</span>
-          
+
             <a href={criterion.wcagUrl}
             target="_blank"
             rel="noopener noreferrer"
@@ -169,6 +169,34 @@ export function CriterionCard({
 
         <h2 className="criterion-title">{criterion.title}</h2>
         <p className="criterion-description">{criterion.description}</p>
+      </div>
+
+      <div className="criterion-nav criterion-nav-top">
+        {prevCriterion ? (
+          <Link
+            href={`/audit/${auditId}/page/${pageId}?criterion=${prevCriterion.id}`}
+            className="btn btn-outline btn-sm"
+          >
+            ← {prevCriterion.id} {prevCriterion.title}
+          </Link>
+        ) : (
+          <div />
+        )}
+        {nextCriterion ? (
+          <Link
+            href={`/audit/${auditId}/page/${pageId}?criterion=${nextCriterion.id}`}
+            className="btn btn-outline btn-sm"
+          >
+            {nextCriterion.id} {nextCriterion.title} →
+          </Link>
+        ) : (
+          <Link
+            href={`/audit/${auditId}`}
+            className="btn btn-primary btn-sm"
+          >
+            Finish Page ✓
+          </Link>
+        )}
       </div>
 
       {/* Lighthouse banner */}

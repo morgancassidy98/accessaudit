@@ -135,7 +135,7 @@ export function PageList({
                 fontWeight: 500,
               }}>
                 <div style={{ fontSize: '20px', fontWeight: 600, lineHeight: 1 }}>
-                  {page.lighthouseScore}
+                  {page.lighthouseScore}/100
                 </div>
                 <div style={{ fontSize: '11px', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
                   Lighthouse
@@ -211,17 +211,21 @@ export function PageList({
               >
                 {page.stats.tested === 0 ? 'Start Audit' : 'Continue Audit'}
               </Link>
-              {page.scannedAt === null && (
-                <ScanButton
-                  pageId={page.id}
-                  auditId={auditId}
-                  pageUrl={page.url}
-                  onError={(msg) => setError(page.id, msg)}
-                />
-              )}
+              <ScanButton
+                pageId={page.id}
+                auditId={auditId}
+                pageUrl={page.url}
+                onError={(msg) => setError(page.id, msg)}
+                label={page.scannedAt === null ? '⚡ Auto-scan' : '↻ Rescan'}
+              />
               {page.scannedAt !== null && (
                 <span className="text-muted" style={{ fontSize: '13px' }}>
-                  ✓ Scanned
+                  ✓ Scanned {new Date(page.scannedAt).toLocaleString([], {
+                    month: 'short',
+                    day: 'numeric',
+                    hour: 'numeric',
+                    minute: '2-digit',
+                  })}
                 </span>
               )}
               <DeletePageButton
@@ -252,23 +256,25 @@ export function PageList({
   );
 }
 
-function ScanButton({
+export function ScanButton({
   pageId,
   auditId,
   pageUrl,
   onError,
+  label,
 }: {
   pageId: string;
   auditId: string;
   pageUrl: string;
-  onError: (msg: string) => void;
+  onError?: (msg: string) => void;
+  label: string;
 }) {
   const router = useRouter();
   const [isScanning, setIsScanning] = useState(false);
 
   const handleScan = async () => {
     setIsScanning(true);
-    onError('');
+    onError?.('');
     try {
       const res = await fetch(`/api/audits/${auditId}/scan`, {
         method: 'POST',
@@ -281,10 +287,11 @@ function ScanButton({
         throw new Error(data?.error ?? 'Scan failed');
       }
 
+      setIsScanning(false);
       router.refresh();
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Scan failed — URL must be publicly accessible.';
-      onError(message);
+      onError?.(message);
       setIsScanning(false);
     }
   };
@@ -295,8 +302,9 @@ function ScanButton({
       onClick={handleScan}
       disabled={isScanning}
       aria-busy={isScanning}
+      style={{ alignSelf: 'center', margin: 0 }}
     >
-      {isScanning ? 'Scanning…' : '⚡ Auto-scan'}
+      {isScanning ? 'Scanning…' : label}
     </button>
   );
 }

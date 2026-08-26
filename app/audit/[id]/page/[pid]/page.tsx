@@ -3,6 +3,7 @@ import { prisma } from '@/lib/prisma';
 import { wcagCriteria } from '@/lib/wcag-criteria';
 import { ChecklistNav } from '@/components/ChecklistNav';
 import { CriterionCard } from '@/components/CriterionCard';
+import { ScanButton } from '@/components/PageList';
 import Link from 'next/link';
 
 export const revalidate = 0;
@@ -111,37 +112,44 @@ export default async function ChecklistPage({
         </div>
 
         {/* Progress */}
-        <div className="checklist-progress">
-          <div className="flex items-center gap-3">
-            <div className="progress-bar" style={{ width: '160px' }}>
-              <div
-                className="progress-bar-fill"
-                style={{ width: `${progress}%` }}
-              />
+        <div className="checklist-topbar-actions">
+          {page.lighthouseData && (
+            <div className="checklist-scan-notice" role="status">
+              <div className="checklist-scan-body">
+                <div className="checklist-scan-badge">
+                  <span className="checklist-scan-badge-icon">⚡</span>
+                  <span>{page.lighthouseScore ?? 0}/100</span>
+                </div>
+                <span className="checklist-scan-text">Flagged criteria are sorted to the top.</span>
+              </div>
             </div>
-            <span style={{ fontSize: '15px', color: '#444', flexShrink: 0 }}>
-              {tested} / {wcagCriteria.length}
-            </span>
-          </div>
-          <div className="flex gap-3 mt-1" style={{ justifyContent: 'flex-end' }}>
-            <span style={{ fontSize: '15px', color: '#2d5a1e' }}>✓ {passed}</span>
-            <span style={{ fontSize: '15px', color: '#6e0d2a' }}>✕ {failed}</span>
-            <span style={{ fontSize: '15px', color: '#444' }}>N/A {na}</span>
+          )}
+          <ScanButton
+            pageId={page.id}
+            auditId={id}
+            pageUrl={page.url}
+            label={page.scannedAt === null ? '⚡ Auto-scan' : '↻ Rescan'}
+          />
+          <div className="checklist-progress">
+            <div className="checklist-progress-main">
+              <div className="progress-bar" style={{ width: '160px' }}>
+                <div
+                  className="progress-bar-fill"
+                  style={{ width: `${progress}%` }}
+                />
+              </div>
+              <span className="checklist-progress-value">
+                {tested} / {wcagCriteria.length}
+              </span>
+            </div>
+            <div className="checklist-progress-meta">
+              <span style={{ color: '#2d5a1e' }}>✓ {passed}</span>
+              <span style={{ color: '#6e0d2a' }}>✕ {failed}</span>
+              <span style={{ color: '#444' }}>N/A {na}</span>
+            </div>
           </div>
         </div>
       </div>
-
-      {/* Automated scan banner */}
-      {page.lighthouseData && (
-        <div className="checklist-scan-notice" role="status">
-          <span>⚡</span>
-          <span>
-            Automated scan complete — Lighthouse score: <strong>{page.lighthouseScore}</strong>.
-            Flagged criteria are sorted to the top. Automated results are a starting point only —
-            manual testing is required to verify each issue.
-          </span>
-        </div>
-      )}
 
       <div className="checklist-body">
 

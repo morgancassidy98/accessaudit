@@ -53,7 +53,13 @@ export const wcagCriteria: Criterion[] = [
       { order: 4, method: 'visual', instruction: 'Check that CAPTCHAs provide an audio or alternative method. Check that charts and graphs have text alternatives explaining the data.' },
     ],
     wcagUrl: 'https://www.w3.org/WAI/WCAG21/Understanding/non-text-content.html',
-    lighthouseAuditIds: ['image-alt', 'input-image-alt', 'role-img-alt'],
+    lighthouseAuditIds: [
+  'image-alt',
+  'input-image-alt',
+  'role-img-alt',
+  'image-redundant-alt',
+  'object-alt',
+],
   },
 
   {
@@ -161,7 +167,21 @@ export const wcagCriteria: Criterion[] = [
       { order: 4, method: 'visual', instruction: 'Check that form fields have associated labels, table headers use th elements, and required fields are indicated both visually and programmatically.' },
     ],
     wcagUrl: 'https://www.w3.org/WAI/WCAG21/Understanding/info-and-relationships.html',
-    lighthouseAuditIds: ['heading-order', 'table-duplicate-name', 'td-headers-attr', 'th-has-data-cells'],
+    lighthouseAuditIds: [
+  'heading-order',
+  'table-duplicate-name',
+  'td-headers-attr',
+  'th-has-data-cells',
+  'definition-list',
+  'dlitem',
+  'list',
+  'listitem',
+  'landmark-complementary-is-top-level',
+  'landmark-main-is-top-level',
+  'landmark-no-duplicate-banner',
+  'landmark-no-duplicate-contentinfo',
+  'landmark-no-duplicate-main',
+],
   },
 
   {
@@ -289,7 +309,7 @@ export const wcagCriteria: Criterion[] = [
       { order: 4, method: 'visual', instruction: 'Pay special attention to placeholder text, disabled elements, and text over images — these are commonly missed.' },
     ],
     wcagUrl: 'https://www.w3.org/WAI/WCAG21/Understanding/contrast-minimum.html',
-    lighthouseAuditIds: ['color-contrast'],
+    lighthouseAuditIds: ['color-contrast', 'color-contrast-enhanced'],
   },
 
   {
@@ -362,6 +382,7 @@ export const wcagCriteria: Criterion[] = [
       { order: 3, method: 'keyboard', instruction: 'Tab through the page and verify that the focus indicator (outline) has at least 3:1 contrast against the adjacent background.' },
     ],
     wcagUrl: 'https://www.w3.org/WAI/WCAG21/Understanding/non-text-contrast.html',
+    lighthouseAuditIds: ['non-composited-animations'],
   },
 
   {
@@ -420,7 +441,7 @@ export const wcagCriteria: Criterion[] = [
       { order: 4, method: 'keyboard', instruction: 'Check for any functionality that requires mouse hover to reveal — tooltips, menus, reveal-on-hover buttons. These must also work with keyboard focus.' },
     ],
     wcagUrl: 'https://www.w3.org/WAI/WCAG21/Understanding/keyboard.html',
-    lighthouseAuditIds: ['accesskeys'],
+  lighthouseAuditIds: ['accesskeys', 'custom-controls-labels', 'custom-controls-roles', 'focusable-controls'],
   },
 
   {
@@ -527,7 +548,7 @@ export const wcagCriteria: Criterion[] = [
       { order: 2, method: 'screen_reader', instruction: 'Alternatively, verify the page uses proper landmark regions (header, nav, main, footer) — screen reader users can navigate by landmark as a bypass mechanism.' },
     ],
     wcagUrl: 'https://www.w3.org/WAI/WCAG21/Understanding/bypass-blocks.html',
-    lighthouseAuditIds: ['bypass'],
+    lighthouseAuditIds: ['bypass', 'landmark-one-main', 'page-has-heading-one'],
   },
 
   {
@@ -584,7 +605,7 @@ export const wcagCriteria: Criterion[] = [
       { order: 3, method: 'visual', instruction: 'Check that icon-only links have an aria-label or title that describes the destination.' },
     ],
     wcagUrl: 'https://www.w3.org/WAI/WCAG21/Understanding/link-purpose-in-context.html',
-    lighthouseAuditIds: ['link-name'],
+    lighthouseAuditIds: ['link-name', 'link-in-text-block'],
   },
 
   {
@@ -638,7 +659,7 @@ export const wcagCriteria: Criterion[] = [
       { order: 3, method: 'visual', instruction: 'Verify focus is never suppressed using outline: none or outline: 0 in CSS without a replacement indicator.' },
     ],
     wcagUrl: 'https://www.w3.org/WAI/WCAG21/Understanding/focus-visible.html',
-    lighthouseAuditIds: ['focus-traps'],
+   lighthouseAuditIds: ['focus-traps', 'focusable-controls', 'interactive-element-affordance'],
   },
 
   // ── UNDERSTANDABLE ────────────────────────────────────────────
@@ -659,7 +680,7 @@ export const wcagCriteria: Criterion[] = [
       { order: 2, method: 'automated', instruction: 'Run axe DevTools — it will flag a missing or empty lang attribute on the html element.' },
     ],
     wcagUrl: 'https://www.w3.org/WAI/WCAG21/Understanding/language-of-page.html',
-    lighthouseAuditIds: ['html-has-lang', 'html-lang-valid'],
+    lighthouseAuditIds: ['html-has-lang', 'html-lang-valid', 'valid-lang'],
   },
 
   {
@@ -782,7 +803,7 @@ export const wcagCriteria: Criterion[] = [
       { order: 3, method: 'manual', instruction: 'For fields with format requirements (phone number, date), verify instructions are provided before the field, not only after submission.' },
     ],
     wcagUrl: 'https://www.w3.org/WAI/WCAG21/Understanding/labels-or-instructions.html',
-    lighthouseAuditIds: ['label', 'label-content-name-mismatch'],
+   lighthouseAuditIds: ['label', 'label-content-name-mismatch', 'form-field-multiple-labels'],
   },
 
   {
@@ -837,7 +858,7 @@ export const wcagCriteria: Criterion[] = [
       { order: 2, method: 'automated', instruction: 'Run axe DevTools and check for duplicate ID violations — duplicate IDs break aria-labelledby and aria-describedby associations.' },
     ],
     wcagUrl: 'https://www.w3.org/WAI/WCAG21/Understanding/parsing.html',
-    lighthouseAuditIds: ['duplicate-id-active', 'duplicate-id-aria'],
+    lighthouseAuditIds: ['duplicate-id-active', 'duplicate-id-aria', 'duplicate-id'],
   },
 
   {
@@ -859,7 +880,26 @@ export const wcagCriteria: Criterion[] = [
       { order: 4, method: 'screen_reader', instruction: 'Interact with dynamic content — expanding accordions, toggling checkboxes, opening modals. Verify state changes are announced by the screen reader.' },
     ],
     wcagUrl: 'https://www.w3.org/WAI/WCAG21/Understanding/name-role-value.html',
-    lighthouseAuditIds: ['aria-allowed-attr', 'aria-required-attr', 'aria-valid-attr', 'aria-valid-attr-value', 'button-name', 'input-button-name'],
+    lighthouseAuditIds: [
+  'aria-allowed-attr',
+  'aria-required-attr',
+  'aria-valid-attr',
+  'aria-valid-attr-value',
+  'aria-hidden-body',
+  'aria-hidden-focus',
+  'aria-input-field-name',
+  'aria-meter-name',
+  'aria-progressbar-name',
+  'aria-required-children',
+  'aria-required-parent',
+  'aria-roles',
+  'aria-toggle-field-name',
+  'aria-tooltip-name',
+  'aria-treeitem-name',
+  'button-name',
+  'input-button-name',
+  'select-name',
+],
   },
 
   {
