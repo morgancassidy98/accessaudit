@@ -1,36 +1,99 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Audit Ally
 
-## Getting Started
+Audit Ally is a Next.js app for tracking and reporting WCAG accessibility audits across multiple pages and audits. It helps teams capture findings for each WCAG criterion, run Lighthouse-based accessibility checks, review contrast issues, and export a shareable audit report.
 
-First, run the development server:
+## Features
+
+- Create and manage accessibility audits for a website or digital product
+- Add pages to each audit and track their status over time
+- Review a WCAG checklist grouped by criterion and level
+- Mark criteria as pass, fail, N/A, or untested with notes
+- Run automated Lighthouse accessibility scans for individual pages
+- View Lighthouse scores and related audit details for matching criteria
+- Check foreground/background color contrast against WCAG thresholds
+- Generate a report summary and exportable report output
+- Share completed audits via a public report page
+
+## Tech Stack
+
+- Next.js 16
+- React 19
+- TypeScript
+- Prisma ORM
+- PostgreSQL
+- Lighthouse PageSpeed accessibility checks
+
+## Project Structure
+
+- `app/` — App routes and pages
+- `components/` — UI for dashboards, checklists, reports, and contrast tools
+- `lib/` — shared logic and WCAG criteria data
+- `prisma/` — Prisma schema and migrations
+- `public/` — static assets
+
+## Requirements
+
+- Node.js 20+
+- npm
+- PostgreSQL database
+
+## Local Setup
+
+1. Install dependencies:
+
+```bash
+npm install
+```
+
+2. Create a `.env` file in the project root and add your database URL:
+
+```bash
+PRISMA_DATABASE_URL="postgresql://postgres:postgres@localhost:5432/audit_ally?schema=public"
+```
+
+> Replace the example value with your own PostgreSQL connection string.
+
+3. Generate Prisma Client and apply the schema:
+
+```bash
+npm run db:generate
+npm run db:migrate
+```
+
+4. Start the app:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+5. Open http://localhost:3000 in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Available Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run dev        # Start the Next.js dev server
+npm run build      # Build production assets
+npm run start      # Start the production server
+npm run lint       # Run ESLint
+npm run db:migrate # Apply Prisma migrations
+npm run db:generate # Generate Prisma Client
+npm run db:studio  # Open Prisma Studio
+npm run db:reset   # Reset the database and rerun migrations
+```
 
-## Learn More
+## Typical Workflow
 
-To learn more about Next.js, take a look at the following resources:
+1. Create a new audit from the dashboard.
+2. Add the base website URL and pages to review.
+3. Open an audit page to evaluate WCAG criteria one by one.
+4. Use Lighthouse scans when available to supplement manual review.
+5. Record findings, notes, and status for each criterion.
+6. Review the report page to summarize compliance and export results.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Database Notes
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+This project uses Prisma with PostgreSQL. The schema is defined in `prisma/schema.prisma` and the connection string is loaded from `PRISMA_DATABASE_URL`.
 
-## Deploy on Vercel
+## Notes
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The app is designed for accessibility review workflows rather than a fully automated scan-only solution. It is best used as a guided audit tracker for manual testing, automated checks, and summary reporting.
