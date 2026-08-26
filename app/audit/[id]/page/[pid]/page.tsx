@@ -88,7 +88,12 @@ export default async function ChecklistPage({
             className="btn btn-ghost btn-sm"
             style={{ flexShrink: 0 }}
           >
-            ← Back
+            <span aria-hidden="true" style={{ display: 'inline-flex', alignItems: 'center' }}>
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: '6px' }}>
+                <path d="M15 18L9 12L15 6" />
+              </svg>
+            </span>
+            Back
           </Link>
           <div style={{ minWidth: 0 }}>
             <div style={{
@@ -117,7 +122,9 @@ export default async function ChecklistPage({
             <div className="checklist-scan-notice" role="status">
               <div className="checklist-scan-body">
                 <div className="checklist-scan-badge">
-                  <span className="checklist-scan-badge-icon">⚡</span>
+                  <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={{ marginRight: '4px' }}>
+                    <path d="M13 2L5 13H11L9 22L19 10H13L15 2Z" />
+                  </svg>
                   <span>{page.lighthouseScore ?? 0}/100</span>
                 </div>
                 <span className="checklist-scan-text">Flagged criteria are sorted to the top.</span>
@@ -128,7 +135,7 @@ export default async function ChecklistPage({
             pageId={page.id}
             auditId={id}
             pageUrl={page.url}
-            label={page.scannedAt === null ? '⚡ Auto-scan' : '↻ Rescan'}
+            label={page.scannedAt === null ? 'Auto-scan' : 'Rescan'}
           />
           <div className="checklist-progress">
             <div className="checklist-progress-main">
@@ -143,8 +150,8 @@ export default async function ChecklistPage({
               </span>
             </div>
             <div className="checklist-progress-meta">
-              <span style={{ color: '#2d5a1e' }}>✓ {passed}</span>
-              <span style={{ color: '#6e0d2a' }}>✕ {failed}</span>
+              <span style={{ color: '#2d5a1e' }}>Pass {passed}</span>
+              <span style={{ color: '#6e0d2a' }}>Fail {failed}</span>
               <span style={{ color: '#2f2f2f' }}>N/A {na}</span>
             </div>
           </div>

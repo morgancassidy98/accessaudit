@@ -4,6 +4,7 @@ import { prisma } from '@/lib/prisma';
 import { wcagCriteria } from '@/lib/wcag-criteria';
 import { AddPageForm } from '@/components/AddPageForm';
 import { PageList } from '@/components/PageList';
+import { ArrowLeftIcon, FileIcon } from '@/components/icons';
 
 async function getAudit(id: string) {
   const audit = await prisma.audit.findUnique({
@@ -73,10 +74,13 @@ export default async function AuditPage({
           <p className="page-subtitle">{audit.url}</p>
         </div>
         <Link href={`/audit/${id}/report`} className="btn btn-outline">
-    View Report
-  </Link>
+          View Report
+        </Link>
         <Link href="/" className="btn btn-outline flex-shrink-0">
-          ← Back
+          <span className="flex items-center gap-2">
+            <ArrowLeftIcon size={14} />
+            <span>Back</span>
+          </span>
         </Link>
       </div>
 
@@ -117,7 +121,7 @@ export default async function AuditPage({
 
           {pagesWithStats.length === 0 ? (
             <div className="empty-state">
-              <div className="empty-state-icon">📄</div>
+              <div className="empty-state-icon"><FileIcon size={24} /></div>
               <h3>No pages yet</h3>
               <p>
                 Add the pages you want to audit below. Each page gets its

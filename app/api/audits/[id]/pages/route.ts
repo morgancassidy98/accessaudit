@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { wcagCriteria } from '@/lib/wcag-criteria';
+import { createReadableAuditId } from '@/lib/readable-id';
 
 // GET /api/audits/[id]/pages — list pages for an audit
 export async function GET(
@@ -41,9 +42,17 @@ export async function POST(
       );
     }
 
+    const existingPageIds = await prisma.page.findMany({
+      where: { auditId: id },
+      select: { id: true },
+    });
+
+    const readablePageId = createReadableAuditId(title, existingPageIds.map((page) => page.id));
+
     // Create the page and seed one Result row per WCAG criterion
     const page = await prisma.page.create({
       data: {
+        id: readablePageId,
         auditId: id,
         url,
         title,

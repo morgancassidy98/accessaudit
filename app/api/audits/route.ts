@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { wcagCriteria } from '@/lib/wcag-criteria';
+import { createReadableAuditId } from '@/lib/readable-id';
 
 // GET /api/audits — list all audits with summary stats
 export async function GET() {
@@ -50,8 +51,14 @@ export async function POST(request: Request) {
       );
     }
 
+    const existingAuditIds = await prisma.audit.findMany({
+      select: { id: true },
+    });
+
+    const readableId = createReadableAuditId(name, existingAuditIds.map((audit) => audit.id));
+
     const audit = await prisma.audit.create({
-      data: { name, url },
+      data: { id: readableId, name, url },
     });
 
     return NextResponse.json(audit, { status: 201 });

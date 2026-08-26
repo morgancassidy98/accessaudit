@@ -1,8 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import type { Criterion } from '@/lib/wcag-criteria';
+import { BoltIcon, CheckIcon, ChevronDownIcon, ChevronRightIcon, CircleIcon, XIcon } from './icons';
 
 type Result = {
   id: string;
@@ -12,11 +13,11 @@ type Result = {
 };
 
 const statusIcon = (status: string, automatedStatus: string | null) => {
-  if (status === 'pass')    return { icon: '✓', color: '#2d5a1e' };
-  if (status === 'fail')    return { icon: '✕', color: '#6e0d2a' };
-  if (status === 'na')      return { icon: '—', color: '#3b3b3b' };
-  if (automatedStatus === 'fail') return { icon: '!', color: '#7b652d' };
-  return { icon: '○', color: '#6b6b6b' };
+  if (status === 'pass') return { icon: <CheckIcon size={16} />, color: '#2d5a1e' };
+  if (status === 'fail') return { icon: <XIcon size={16} />, color: '#6e0d2a' };
+  if (status === 'na') return { icon: '—', color: '#3b3b3b' };
+  if (automatedStatus === 'fail') return { icon: <BoltIcon size={16} />, color: '#7b652d' };
+  return { icon: <CircleIcon size={16} />, color: '#6b6b6b' };
 };
 
 const principles = ['Perceivable', 'Operable', 'Understandable', 'Robust'] as const;
@@ -34,7 +35,34 @@ export function ChecklistNav({
   auditId: string;
   pageId: string;
 }) {
-  const [collapsedGroups, setCollapsedGroups] = useState<Record<string, boolean>>({});
+  const [isMobile, setIsMobile] = useState(false);
+  const [collapsedGroups, setCollapsedGroups] = useState<Record<string, boolean>>({
+    Perceivable: false,
+    Operable: false,
+    Understandable: false,
+    Robust: false,
+  });
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(max-width: 768px)');
+    const update = () => {
+      const mobile = mediaQuery.matches;
+      setIsMobile(mobile);
+      setCollapsedGroups((current) => {
+        const nextState = { ...current };
+        principles.forEach((principle) => {
+          if (mobile && typeof nextState[principle] === 'undefined') {
+            nextState[principle] = true;
+          }
+        });
+        return nextState;
+      });
+    };
+
+    update();
+    mediaQuery.addEventListener('change', update);
+    return () => mediaQuery.removeEventListener('change', update);
+  }, []);
 
   const toggleGroup = (principle: string) => {
     setCollapsedGroups((current) => ({
@@ -49,7 +77,6 @@ export function ChecklistNav({
       aria-label="WCAG criteria navigation"
     >
       <div className="checklist-nav-scroll-hint" aria-hidden="true">
-        <span>↓</span>
         <span>Scroll for more criteria</span>
       </div>
 
@@ -57,7 +84,7 @@ export function ChecklistNav({
         const group = criteria.filter((c) => c.principle === principle);
         if (group.length === 0) return null;
 
-        const isCollapsed = collapsedGroups[principle] ?? false;
+        const isCollapsed = collapsedGroups[principle] ?? (isMobile ? true : false);
 
         return (
           <div key={principle} className="checklist-nav-group">
@@ -69,7 +96,9 @@ export function ChecklistNav({
               aria-label={`${isCollapsed ? 'Expand' : 'Collapse'} ${principle} section`}
             >
               <span>{principle}</span>
-              <span className="checklist-nav-group-caret">{isCollapsed ? '▸' : '▾'}</span>
+              <span className="checklist-nav-group-caret" aria-hidden="true">
+                {isCollapsed ? <ChevronRightIcon size={14} /> : <ChevronDownIcon size={14} />}
+              </span>
             </button>
 
             {!isCollapsed && (
@@ -108,7 +137,7 @@ export function ChecklistNav({
                           className="checklist-nav-flag"
                           aria-label="Automated flag"
                         >
-                          ⚡
+                          <BoltIcon size={12} />
                         </span>
                       )}
                     </Link>

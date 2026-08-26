@@ -216,11 +216,11 @@ export function PageList({
                 auditId={auditId}
                 pageUrl={page.url}
                 onError={(msg) => setError(page.id, msg)}
-                label={page.scannedAt === null ? '⚡ Auto-scan' : '↻ Rescan'}
+                label={page.scannedAt === null ? 'Auto-scan' : 'Rescan'}
               />
               {page.scannedAt !== null && (
                 <span className="text-muted" style={{ fontSize: '13px' }}>
-                  ✓ Scanned {new Date(page.scannedAt).toLocaleString([], {
+                  Scanned {new Date(page.scannedAt).toLocaleString([], {
                     month: 'short',
                     day: 'numeric',
                     hour: 'numeric',

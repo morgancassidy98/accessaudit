@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useCallback } from 'react';
+import { CheckIcon, XIcon } from '@/components/icons';
 
 export function ContrastChecker() {
   const [fg, setFg] = useState('#000000');
@@ -120,11 +121,13 @@ export function ContrastChecker() {
                 <span
                   style={{
                     color: level.passes ? '#2d5a1e' : '#6e0d2a',
-                    fontWeight: 500,
-                    fontSize: '15px',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
                   }}
+                  aria-hidden="true"
                 >
-                  {level.passes ? '✓' : '✕'}
+                  {level.passes ? <CheckIcon size={15} /> : <XIcon size={15} />}
                 </span>
                 <span style={{ fontSize: '14px' }}>{level.label}</span>
                 <span className="text-muted" style={{ fontSize: '13px' }}>

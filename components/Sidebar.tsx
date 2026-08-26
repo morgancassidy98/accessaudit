@@ -3,10 +3,11 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
+import { DashboardIcon, MenuIcon, PlusIcon, XIcon } from './icons';
 
 const navItems = [
-  { href: '/',          icon: '◈', label: 'Dashboard'  },
-  { href: '/audit/new', icon: '+', label: 'New Audit'   },
+  { href: '/', icon: <DashboardIcon size={16} />, label: 'Dashboard' },
+  { href: '/audit/new', icon: <PlusIcon size={16} />, label: 'New Audit' },
 ];
 
 export function Sidebar() {
@@ -37,7 +38,7 @@ export function Sidebar() {
         aria-controls="sidebar"
         aria-label={isOpen ? 'Close navigation' : 'Open navigation'}
       >
-        {isOpen ? '✕' : '☰'}
+        {isOpen ? <XIcon size={18} /> : <MenuIcon size={18} />}
       </button>
 
       {/* Backdrop */}

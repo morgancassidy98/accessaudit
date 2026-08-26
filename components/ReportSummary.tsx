@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import type { Criterion } from '@/lib/wcag-criteria';
+import { ChevronDownIcon, ChevronRightIcon, FileIcon, CheckIcon } from './icons';
 
 type Failure = {
   criterion: Criterion;
@@ -61,7 +62,7 @@ export function ReportSummary({
 
       {pages.length === 0 ? (
         <div className="empty-state">
-          <div className="empty-state-icon">📄</div>
+          <div className="empty-state-icon"><FileIcon size={24} /></div>
           <h3>No pages audited</h3>
           <p>Add pages to your audit and complete the checklist to generate a report.</p>
         </div>
@@ -89,12 +90,14 @@ export function ReportSummary({
                 aria-expanded={expandedPages[page.id] ?? false}
               >
                 <span style={{
-                  fontSize: '14px',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
                   color: 'var(--color-primary)',
                   flexShrink: 0,
                   width: '20px',
-                }}>
-                  {expandedPages[page.id] ? '▼' : '▶'}
+                }} aria-hidden="true">
+                  {expandedPages[page.id] ? <ChevronDownIcon size={14} /> : <ChevronRightIcon size={14} />}
                 </span>
 
                 <div style={{ flex: 1, minWidth: 0 }}>
@@ -226,7 +229,7 @@ export function ReportSummary({
                       alignItems: 'center',
                       gap: '8px',
                     }}>
-                      <span>✓</span>
+                      <CheckIcon size={16} />
                       <span>No failures recorded for this page.</span>
                     </div>
                   ) : (

@@ -670,6 +670,43 @@ select.form-input {
   scrollbar-gutter: stable;
 }
 
+@media (max-width: 768px) {
+  .checklist-nav {
+    max-height: 180px;
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .checklist-nav-scroll-hint {
+    font-size: 10px;
+    padding: 4px 8px 6px;
+  }
+
+  .checklist-nav-group-label {
+    font-size: 12px;
+    padding: 8px 8px 4px;
+  }
+
+  .checklist-nav-group-caret {
+    font-size: 14px;
+  }
+
+  .checklist-nav-item {
+    gap: 8px;
+    padding: 7px 8px;
+  }
+
+  .checklist-nav-status {
+    width: 16px;
+    font-size: 16px;
+  }
+
+  .checklist-nav-id {
+    font-size: 13px;
+  }
+}
+
 .checklist-nav-scroll-hint {
   display: flex;
   align-items: center;
@@ -1128,7 +1165,7 @@ select.form-input {
     width: 100%;
     border-right: none;
     border-bottom: 1px solid var(--color-border);
-    max-height: 220px;
+    max-height: 180px;
   }
 
   .criterion-card {
@@ -1141,7 +1178,28 @@ select.form-input {
 
   .checklist-topbar {
     padding: 10px 16px;
-    font-size:15px;
+    font-size: 15px;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .checklist-topbar-actions {
+    width: 100%;
+    justify-content: space-between;
+    margin-left: 0;
+  }
+
+  .checklist-progress {
+    width: 100%;
+  }
+
+  .checklist-progress-main {
+    width: 100%;
+  }
+
+  .checklist-progress-main .progress-bar {
+    flex: 1;
+    width: auto;
   }
 
   .criterion-title { font-size: 22px; }

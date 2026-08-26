@@ -5,6 +5,18 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import type { Criterion } from '@/lib/wcag-criteria';
 import { ContrastChecker } from './ContrastChecker';
+import {
+  ArrowLeftIcon,
+  ArrowRightIcon,
+  BoltIcon,
+  CheckIcon,
+  CircleIcon,
+  DocumentCheckIcon,
+  EyeIcon,
+  KeyboardIcon,
+  ScreenReaderIcon,
+  XIcon,
+} from './icons';
 
 type Result = {
   id: string;
@@ -27,12 +39,18 @@ type LighthouseAudit = {
 
 const methodIcon = (method: string) => {
   switch (method) {
-    case 'keyboard':      return { icon: '⌨', label: 'Keyboard',     color: '#2D5D7B', bg: '#e8f1f7' };
-    case 'screen_reader': return { icon: '🔊', label: 'Screen Reader', color: '#5a3d7a', bg: '#f0eaf7' };
-    case 'visual':        return { icon: '👁', label: 'Visual',        color: '#3a6b2a', bg: '#f0f5ee' };
-    case 'automated':     return { icon: '🤖', label: 'Automated',     color: '#7b652d', bg: '#faf5ea' };
-    case 'manual':        return { icon: '📋', label: 'Manual',        color: '#555',    bg: '#f0f0f0' };
-    default:              return { icon: '📋', label: method,          color: '#555',    bg: '#f0f0f0' };
+    case 'keyboard':
+      return { icon: <KeyboardIcon size={14} />, label: 'Keyboard', color: '#2D5D7B', bg: '#e8f1f7' };
+    case 'screen_reader':
+      return { icon: <ScreenReaderIcon size={14} />, label: 'Screen Reader', color: '#5a3d7a', bg: '#f0eaf7' };
+    case 'visual':
+      return { icon: <EyeIcon size={14} />, label: 'Visual', color: '#3a6b2a', bg: '#f0f5ee' };
+    case 'automated':
+      return { icon: <BoltIcon size={14} />, label: 'Automated', color: '#7b652d', bg: '#faf5ea' };
+    case 'manual':
+      return { icon: <DocumentCheckIcon size={14} />, label: 'Manual', color: '#555', bg: '#f0f0f0' };
+    default:
+      return { icon: <DocumentCheckIcon size={14} />, label: method, color: '#555', bg: '#f0f0f0' };
   }
 };
 
@@ -148,7 +166,7 @@ export function CriterionCard({
           </span>
           <span className="badge badge-neutral">{criterion.principle}</span>
           {result?.automatedStatus === 'fail' && (
-            <span className="badge badge-warning">⚡ Auto-flagged</span>
+            <span className="badge badge-warning">Auto-flagged</span>
           )}
         </div>
 
@@ -163,7 +181,7 @@ export function CriterionCard({
             rel="noopener noreferrer"
             style={{ fontSize: '13px' }}
           >
-            WCAG Spec ↗
+            WCAG Spec
           </a>
         </div>
 
@@ -177,7 +195,10 @@ export function CriterionCard({
             href={`/audit/${auditId}/page/${pageId}?criterion=${prevCriterion.id}`}
             className="btn btn-outline btn-sm"
           >
-            ← {prevCriterion.id} {prevCriterion.title}
+            <span className="flex items-center gap-2">
+              <ArrowLeftIcon size={14} />
+              <span>{prevCriterion.id} {prevCriterion.title}</span>
+            </span>
           </Link>
         ) : (
           <div />
@@ -187,14 +208,17 @@ export function CriterionCard({
             href={`/audit/${auditId}/page/${pageId}?criterion=${nextCriterion.id}`}
             className="btn btn-outline btn-sm"
           >
-            {nextCriterion.id} {nextCriterion.title} →
+            <span className="flex items-center gap-2">
+              <span>{nextCriterion.id} {nextCriterion.title}</span>
+              <ArrowRightIcon size={14} />
+            </span>
           </Link>
         ) : (
           <Link
             href={`/audit/${auditId}`}
             className="btn btn-primary btn-sm"
           >
-            Finish Page ✓
+            Finish Page
           </Link>
         )}
       </div>
@@ -203,7 +227,7 @@ export function CriterionCard({
       {lighthouseAudits.length > 0 && (
         <div className="criterion-lighthouse-banner">
           <div className="criterion-lighthouse-header">
-            ⚡ Lighthouse flagged {lighthouseAudits.length} issue{lighthouseAudits.length !== 1 ? 's' : ''} — verify manually
+            Lighthouse flagged {lighthouseAudits.length} issue{lighthouseAudits.length !== 1 ? 's' : ''} — verify manually
           </div>
           {lighthouseAudits.map((audit) => (
             <div key={audit.id} className="criterion-lighthouse-item">
@@ -287,10 +311,10 @@ export function CriterionCard({
 
         <div className="flex gap-2 flex-wrap mb-4">
           {[
-            { value: 'pass',     label: '✓ Pass',     style: 'success' },
-            { value: 'fail',     label: '✕ Fail',     style: 'danger'  },
-            { value: 'na',       label: '— N/A',      style: 'neutral' },
-            { value: 'untested', label: '○ Untested', style: 'outline' },
+            { value: 'pass',     label: 'Pass',     style: 'success' },
+            { value: 'fail',     label: 'Fail',     style: 'danger'  },
+            { value: 'na',       label: 'N/A',      style: 'neutral' },
+            { value: 'untested', label: 'Untested', style: 'outline' },
           ].map((option) => (
             <button
               key={option.value}
@@ -353,7 +377,7 @@ export function CriterionCard({
             <span style={{ fontSize: '13px', color: '#555' }}>Saving…</span>
           )}
           {!isSaving && lastSaved && (
-            <span style={{ fontSize: '13px', color: '#2d5a1e' }}>✓ {lastSaved}</span>
+            <span style={{ fontSize: '13px', color: '#2d5a1e' }}>{lastSaved}</span>
           )}
         </div>
       </div>
@@ -365,7 +389,10 @@ export function CriterionCard({
             href={`/audit/${auditId}/page/${pageId}?criterion=${prevCriterion.id}`}
             className="btn btn-outline btn-sm"
           >
-            ← {prevCriterion.id} {prevCriterion.title}
+            <span className="flex items-center gap-2">
+              <ArrowLeftIcon size={14} />
+              <span>{prevCriterion.id} {prevCriterion.title}</span>
+            </span>
           </Link>
         ) : (
           <div />
@@ -375,14 +402,17 @@ export function CriterionCard({
             href={`/audit/${auditId}/page/${pageId}?criterion=${nextCriterion.id}`}
             className="btn btn-outline btn-sm"
           >
-            {nextCriterion.id} {nextCriterion.title} →
+            <span className="flex items-center gap-2">
+              <span>{nextCriterion.id} {nextCriterion.title}</span>
+              <ArrowRightIcon size={14} />
+            </span>
           </Link>
         ) : (
           <Link
             href={`/audit/${auditId}`}
             className="btn btn-primary btn-sm"
           >
-            Finish Page ✓
+            Finish Page
           </Link>
         )}
       </div>

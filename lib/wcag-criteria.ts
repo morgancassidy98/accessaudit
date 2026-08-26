@@ -162,8 +162,8 @@ export const wcagCriteria: Criterion[] = [
     ],
     howToTest: [
       { order: 1, method: 'automated', instruction: 'Run axe DevTools and review any landmark, heading, list, or table structure violations.' },
-      { order: 2, method: 'visual', instruction: 'Check that headings follow a logical hierarchy (h1 → h2 → h3) without skipping levels. Verify lists use ul/ol elements, not just visual indentation.' },
-      { order: 3, method: 'manual', instruction: 'Open Chrome DevTools → Accessibility panel and inspect the accessibility tree. Confirm visual structure (sections, tables, forms) is reflected in semantic markup.' },
+      { order: 2, method: 'visual', instruction: 'Check that headings follow a logical hierarchy (h1, h2, h3) without skipping levels. Verify lists use ul/ol elements, not just visual indentation.' },
+      { order: 3, method: 'manual', instruction: 'Open Chrome DevTools and inspect the Accessibility panel to review the accessibility tree. Confirm visual structure (sections, tables, forms) is reflected in semantic markup.' },
       { order: 4, method: 'visual', instruction: 'Check that form fields have associated labels, table headers use th elements, and required fields are indicated both visually and programmatically.' },
     ],
     wcagUrl: 'https://www.w3.org/WAI/WCAG21/Understanding/info-and-relationships.html',
@@ -268,7 +268,7 @@ export const wcagCriteria: Criterion[] = [
     howToTest: [
       { order: 1, method: 'visual', instruction: 'Look for any information conveyed only through color — red for errors, green for success, colored chart lines. Each must have an additional indicator (icon, label, pattern, text).' },
       { order: 2, method: 'visual', instruction: 'Check links within body text. If links are only distinguished from surrounding text by color, they must also be underlined or have another non-color indicator.' },
-      { order: 3, method: 'manual', instruction: 'View the page in grayscale (Chrome DevTools → Rendering → Emulate vision deficiencies → Achromatopsia). Verify all information is still clear.' },
+      { order: 3, method: 'manual', instruction: 'View the page in grayscale using Chrome DevTools rendering options to emulate vision deficiencies. Verify all information remains clear.' },
     ],
     wcagUrl: 'https://www.w3.org/WAI/WCAG21/Understanding/use-of-color.html',
   },
@@ -876,7 +876,7 @@ export const wcagCriteria: Criterion[] = [
     howToTest: [
       { order: 1, method: 'automated', instruction: 'Run axe DevTools and review all ARIA violations — incorrect roles, missing required properties, invalid attribute values.' },
       { order: 2, method: 'screen_reader', instruction: 'Navigate through all interactive elements with a screen reader. Each element should be announced with its name (label), role (button, link, checkbox), and state (checked, expanded, disabled).' },
-      { order: 3, method: 'manual', instruction: 'Open Chrome DevTools → Accessibility panel and inspect custom interactive components. Verify they have appropriate roles, accessible names, and states reflected in the accessibility tree.' },
+      { order: 3, method: 'manual', instruction: 'Open Chrome DevTools and inspect the Accessibility panel for custom interactive components. Verify they have appropriate roles, accessible names, and states reflected in the accessibility tree.' },
       { order: 4, method: 'screen_reader', instruction: 'Interact with dynamic content — expanding accordions, toggling checkboxes, opening modals. Verify state changes are announced by the screen reader.' },
     ],
     wcagUrl: 'https://www.w3.org/WAI/WCAG21/Understanding/name-role-value.html',

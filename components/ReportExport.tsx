@@ -157,7 +157,7 @@ const handleExport = async () => {
       if (page.failures.length === 0) {
         checkPageBreak(8);
         setStyle(10, [45, 122, 42]);
-        doc.text('✓ No failures recorded for this page', margin + 3, y + 4);
+        doc.text('No failures recorded for this page', margin + 3, y + 4);
         y += 12;
       } else {
         page.failures.forEach((failure, i) => {
@@ -233,7 +233,7 @@ const handleExport = async () => {
         className="btn btn-outline"
         onClick={handleCopyLink}
       >
-        🔗 Copy Share Link
+        Copy Share Link
       </button>
       <button
         className="btn btn-primary"
@@ -241,7 +241,7 @@ const handleExport = async () => {
         disabled={isExporting}
         aria-busy={isExporting}
       >
-        {isExporting ? 'Exporting…' : '↓ Export PDF'}
+        {isExporting ? 'Exporting…' : 'Export PDF'}
       </button>
     </div>
   );
