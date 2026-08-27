@@ -1,12 +1,19 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { auth } from '@/lib/auth';
 import { wcagCriteria } from '@/lib/wcag-criteria';
 import { createReadableAuditId } from '@/lib/readable-id';
 
 // GET /api/audits — list all audits with summary stats
 export async function GET() {
   try {
+    const session = await auth();
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     const audits = await prisma.audit.findMany({
+      where: { userId: session.user.id },
       orderBy: { createdAt: 'desc' },
       include: {
         pages: {
@@ -20,8 +27,8 @@ export async function GET() {
     const auditsWithStats = audits.map((audit) => {
       const allResults = audit.pages.flatMap((p) => p.results);
       const totalCriteria = audit.pages.length * wcagCriteria.length;
-      const passed = allResults.filter((r) => r.status === 'pass').length;
-      const failed = allResults.filter((r) => r.status === 'fail').length;
+      const passed  = allResults.filter((r) => r.status === 'pass').length;
+      const failed  = allResults.filter((r) => r.status === 'fail').length;
       const untested = allResults.filter((r) => r.status === 'untested').length;
 
       return {
@@ -42,6 +49,11 @@ export async function GET() {
 // POST /api/audits — create new audit
 export async function POST(request: Request) {
   try {
+    const session = await auth();
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     const { name, url } = await request.json();
 
     if (!name || !url) {
@@ -55,10 +67,18 @@ export async function POST(request: Request) {
       select: { id: true },
     });
 
-    const readableId = createReadableAuditId(name, existingAuditIds.map((audit) => audit.id));
+    const readableId = createReadableAuditId(
+      name,
+      existingAuditIds.map((audit) => audit.id)
+    );
 
     const audit = await prisma.audit.create({
-      data: { id: readableId, name, url },
+      data: {
+        id: readableId,
+        name,
+        url,
+        userId: session.user.id,
+      },
     });
 
     return NextResponse.json(audit, { status: 201 });

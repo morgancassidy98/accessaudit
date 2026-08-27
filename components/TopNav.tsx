@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { signOut, useSession } from 'next-auth/react';
 
 const navItems = [
   { href: '/',          label: 'Dashboard' },
@@ -32,6 +33,13 @@ export function TopNav() {
               {item.label}
             </Link>
           ))}
+          <button
+              onClick={() => signOut({ callbackUrl: '/login' })}
+              className="topnav-link"
+              style={{ background: 'none', border: 'none', cursor: 'pointer' }}
+            >
+              Sign Out
+            </button>
         </nav>
       </div>
     </header>
