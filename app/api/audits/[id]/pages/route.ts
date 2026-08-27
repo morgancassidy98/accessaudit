@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { wcagCriteria } from '@/lib/wcag-criteria';
 import { createReadableAuditId } from '@/lib/readable-id';
+import { getAuthenticatedUserId, getOwnedAudit } from '@/lib/ownership';
 
 // GET /api/audits/[id]/pages — list pages for an audit
 export async function GET(
@@ -10,6 +11,11 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
+    const userId = await getAuthenticatedUserId();
+    if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    if (!await getOwnedAudit(id, userId)) {
+      return NextResponse.json({ error: 'Audit not found' }, { status: 404 });
+    }
 
     const pages = await prisma.page.findMany({
       where: { auditId: id },
@@ -33,6 +39,11 @@ export async function POST(
 ) {
   try {
     const { id } = await params;
+    const userId = await getAuthenticatedUserId();
+    if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    if (!await getOwnedAudit(id, userId)) {
+      return NextResponse.json({ error: 'Audit not found' }, { status: 404 });
+    }
     const { url, title } = await request.json();
 
     if (!url || !title) {

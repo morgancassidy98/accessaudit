@@ -5,11 +5,12 @@ import { ChecklistNav } from '@/components/ChecklistNav';
 import { CriterionCard } from '@/components/CriterionCard';
 import { ScanButton } from '@/components/PageList';
 import Link from 'next/link';
+import { getAuthenticatedUserId } from '@/lib/ownership';
 
 export const revalidate = 0;
 
 
-async function getPage(pid: string) {
+async function getPage(pid: string, userId: string) {
   const page = await prisma.page.findUnique({
     where: { id: pid },
     include: {
@@ -17,7 +18,7 @@ async function getPage(pid: string) {
       results: true,
     },
   });
-  if (!page) notFound();
+  if (!page || page.audit.userId !== userId) notFound();
   return page;
 }
 
@@ -31,7 +32,9 @@ export default async function ChecklistPage({
   const { id, pid } = await params;
   const { criterion } = await searchParams;
 
-  const page = await getPage(pid);
+  const userId = await getAuthenticatedUserId();
+  if (!userId) notFound();
+  const page = await getPage(pid, userId);
 
   // Parse stored Lighthouse data
   const lighthouseAudits = page.lighthouseData

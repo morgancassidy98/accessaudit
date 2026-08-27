@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { wcagCriteria } from '@/lib/wcag-criteria';
+import { getAuthenticatedUserId, getOwnedAudit } from '@/lib/ownership';
 
 // GET /api/audits/[id] — get single audit with pages and results
 export async function GET(
@@ -9,9 +10,11 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
+    const userId = await getAuthenticatedUserId();
+    if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
-    const audit = await prisma.audit.findUnique({
-      where: { id },
+    const audit = await prisma.audit.findFirst({
+      where: { id, userId },
       include: {
         pages: {
           orderBy: { createdAt: 'asc' },
@@ -60,6 +63,11 @@ export async function PUT(
 ) {
   try {
     const { id } = await params;
+    const userId = await getAuthenticatedUserId();
+    if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    if (!await getOwnedAudit(id, userId)) {
+      return NextResponse.json({ error: 'Audit not found' }, { status: 404 });
+    }
     const { name, url } = await request.json();
 
     const audit = await prisma.audit.update({
@@ -83,6 +91,11 @@ export async function DELETE(
 ) {
   try {
     const { id } = await params;
+    const userId = await getAuthenticatedUserId();
+    if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    if (!await getOwnedAudit(id, userId)) {
+      return NextResponse.json({ error: 'Audit not found' }, { status: 404 });
+    }
 
     await prisma.audit.delete({ where: { id } });
 

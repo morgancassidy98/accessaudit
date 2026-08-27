@@ -2,10 +2,13 @@ import Link from 'next/link';
 import { prisma } from '@/lib/prisma';
 import { wcagCriteria } from '@/lib/wcag-criteria';
 import { AuditTable } from '@/components/AuditTable';
+import { getAuthenticatedUserId } from '@/lib/ownership';
+import { redirect } from 'next/navigation';
 export const revalidate = 0;
 
-async function getAudits() {
+async function getAudits(userId: string) {
   return prisma.audit.findMany({
+    where: { userId },
     orderBy: { createdAt: 'desc' },
     include: {
       pages: {
@@ -16,7 +19,10 @@ async function getAudits() {
 }
 
 export default async function DashboardPage() {
-  const audits = await getAudits();
+  const userId = await getAuthenticatedUserId();
+  if (!userId) redirect('/login');
+
+  const audits = await getAudits(userId);
 
   const totalAudits = audits.length;
   const totalPages = audits.reduce((acc, a) => acc + a.pages.length, 0);

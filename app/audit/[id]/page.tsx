@@ -5,10 +5,11 @@ import { wcagCriteria } from '@/lib/wcag-criteria';
 import { AddPageForm } from '@/components/AddPageForm';
 import { PageList } from '@/components/PageList';
 import { ArrowLeftIcon, FileIcon } from '@/components/icons';
+import { getAuthenticatedUserId } from '@/lib/ownership';
 
-async function getAudit(id: string) {
-  const audit = await prisma.audit.findUnique({
-    where: { id },
+async function getAudit(id: string, userId: string) {
+  const audit = await prisma.audit.findFirst({
+    where: { id, userId },
     include: {
       pages: {
         orderBy: { createdAt: 'asc' },
@@ -27,7 +28,9 @@ export default async function AuditPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const audit = await getAudit(id);
+  const userId = await getAuthenticatedUserId();
+  if (!userId) notFound();
+  const audit = await getAudit(id, userId);
 
   // Compute per-page stats
     const pagesWithStats = audit.pages.map((page) => {

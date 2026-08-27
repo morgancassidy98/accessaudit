@@ -4,11 +4,12 @@ import { prisma } from '@/lib/prisma';
 import { wcagCriteria } from '@/lib/wcag-criteria';
 import { ReportSummary } from '@/components/ReportSummary';
 import { ReportExport } from '@/components/ReportExport';
+import { getAuthenticatedUserId } from '@/lib/ownership';
 
 
-async function getAuditReport(id: string) {
-  const audit = await prisma.audit.findUnique({
-    where: { id },
+async function getAuditReport(id: string, userId: string) {
+  const audit = await prisma.audit.findFirst({
+    where: { id, userId },
     include: {
       pages: {
         orderBy: { createdAt: 'asc' },
@@ -26,7 +27,9 @@ export default async function ReportPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const audit = await getAuditReport(id);
+  const userId = await getAuthenticatedUserId();
+  if (!userId) notFound();
+  const audit = await getAuditReport(id, userId);
 
   // Build full report data
   const reportPages = audit.pages.map((page) => {

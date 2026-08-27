@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { lighthouseAuditMap } from '@/lib/wcag-criteria';
+import { getAuthenticatedUserId } from '@/lib/ownership';
 
 export const maxDuration = 10;
 
@@ -11,6 +12,14 @@ export async function POST(
   try {
     const { id } = await params;
     const { pageId, url } = await request.json();
+    const userId = await getAuthenticatedUserId();
+    if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
+    const page = await prisma.page.findFirst({
+      where: { id: pageId, auditId: id, audit: { userId } },
+      select: { id: true },
+    });
+    if (!page) return NextResponse.json({ error: 'Page not found' }, { status: 404 });
 
     const apiKey = process.env.PAGESPEED_API_KEY ?? process.env.NEXT_PUBLIC_PAGESPEED_API_KEY ?? '';
     const apiUrl = `https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${encodeURIComponent(url)}&category=accessibility&strategy=mobile${apiKey ? `&key=${apiKey}` : ''}`;
