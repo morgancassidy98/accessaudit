@@ -112,7 +112,7 @@ export default async function ReportPage({
           <h1>Accessibility Report</h1>
           <p className="page-subtitle">{audit.url}</p>
         </div>
-        <div className="flex gap-3">
+        <div className="report-header-actions flex gap-3">
           <Link href={`/audit/${id}`} className="btn btn-outline back-button">
             <span className="back-button-content gap-2">
               <span aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15 18L9 12L15 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg></span>
@@ -224,7 +224,7 @@ export default async function ReportPage({
                     </span>
                   </div>
                   <div style={{ flex: 1, minWidth: 0 }}>
-                    <div className="flex items-center gap-2 mb-1">
+                    <div className="flex items-center gap-2 mb-1 flex-wrap">
                       <span style={{
                         fontFamily: 'var(--font-mono)',
                         fontSize: '14px',
@@ -239,7 +239,13 @@ export default async function ReportPage({
                         {failure.criterion.title}
                       </span>
                     </div>
-                    <div className="text-muted" style={{ fontSize: '14px', marginBottom: '6px' }}>
+                    <div className="text-muted" style={{ fontSize: '13px', marginBottom: '6px' }}>
+                      WCAG {failure.criterion.level} · {failure.criterion.principle} · {failure.criterion.guideline}
+                    </div>
+                    <p style={{ fontSize: '14px', lineHeight: 1.5, marginBottom: '6px' }}>
+                      {failure.criterion.description}
+                    </p>
+                    <div className="text-muted report-failure-page" style={{ fontSize: '14px', marginBottom: '6px' }}>
                       {failure.pageTitle} — {failure.pageUrl}
                     </div>
                     {failure.result.notes && (

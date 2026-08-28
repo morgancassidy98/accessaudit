@@ -210,6 +210,23 @@ select.form-input {
 
 .page-header h1 { font-size: 30px; }
 
+.report-header-actions {
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.report-page-toggle {
+  min-width: 0;
+}
+
+.report-page-metrics {
+  min-width: 0;
+}
+
+.report-failure-page {
+  overflow-wrap: anywhere;
+}
+
 .page-subtitle {
   font-size: 15px;
   color: #2f2f2f;
@@ -1246,6 +1263,28 @@ select.form-input {
   .page-header > .btn,
   .page-header > .flex {
     align-self: flex-start;
+  }
+
+  .report-header-actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .report-page-toggle {
+    align-items: flex-start !important;
+    flex-wrap: wrap;
+    padding: 16px;
+  }
+
+  .report-page-metrics {
+    width: 100%;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 12px !important;
+  }
+
+  .report-page-metrics > div:last-child {
+    width: min(100%, 180px) !important;
   }
 
   .page-header h1 { font-size: 24px; }

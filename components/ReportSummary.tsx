@@ -74,6 +74,7 @@ export function ReportSummary({
             }}>
               {/* Page header row */}
               <button
+                className="report-page-toggle"
                 onClick={() => togglePage(page.id)}
                 style={{
                   width: '100%',
@@ -114,7 +115,7 @@ export function ReportSummary({
                   </div>
                 </div>
 
-                <div style={{
+                <div className="report-page-metrics" style={{
                   display: 'flex',
                   gap: '16px',
                   alignItems: 'center',
@@ -272,6 +273,9 @@ export function ReportSummary({
                             <div className="text-muted" style={{ fontSize: '14px', marginBottom: '6px' }}>
                               {failure.criterion.principle} — {failure.criterion.guideline}
                             </div>
+                            <p style={{ fontSize: '14px', lineHeight: 1.5, marginBottom: '6px' }}>
+                              {failure.criterion.description}
+                            </p>
                             {failure.result.notes && (
                               <div style={{
                                 fontSize: '14px',

@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import type { Criterion } from '@/lib/wcag-criteria';
+import { ClipboardIcon, DownloadIcon } from './icons';
 
 type Failure = {
   criterion: Criterion;
@@ -126,28 +127,45 @@ const handleExport = async () => {
 
     y += 8;
 
+    const drawWrappedText = (
+      text: string,
+      x: number,
+      width: number,
+      lineHeight: number
+    ) => {
+      const lines = doc.splitTextToSize(text, width);
+      doc.text(lines, x, y);
+      y += lines.length * lineHeight;
+      return lines.length;
+    };
+
     // ── Per Page Results ──
     pages.forEach((page) => {
-      checkPageBreak(28);
-
-      // Page header bar
-      doc.setFillColor(232, 241, 247);
-      doc.rect(margin, y - 5, contentWidth, 16, 'F');
-
-      setStyle(12, [26, 26, 46], true);
-      doc.text(page.title, margin + 3, y + 4);
+      checkPageBreak(34);
 
       const statsText = `Pass Rate: ${page.stats.passRate}%  |  Failures: ${page.stats.failed}`;
       setStyle(9, [85, 85, 85]);
       const statsWidth = doc.getTextWidth(statsText);
+      const titleWidth = Math.max(contentWidth - statsWidth - 12, 35);
+      const titleLines = doc.splitTextToSize(page.title, titleWidth);
+      const headerHeight = Math.max(16, titleLines.length * 5 + 9);
+
+      // Page header bar
+      doc.setFillColor(232, 241, 247);
+      doc.rect(margin, y - 5, contentWidth, headerHeight, 'F');
+
+      setStyle(12, [26, 26, 46], true);
+      doc.text(titleLines, margin + 3, y + 4);
+
+      setStyle(9, [85, 85, 85]);
       doc.text(statsText, margin + contentWidth - statsWidth - 2, y + 4);
 
-      y += 14;
+      y += headerHeight + 4;
 
       // URL with breathing room
       setStyle(9, [100, 100, 100]);
-      doc.text(page.url, margin + 3, y);
-      y += 10;
+      drawWrappedText(page.url, margin + 3, contentWidth - 6, 4.5);
+      y += 6;
 
       // Divider
       doc.setDrawColor(210, 220, 230);
@@ -161,7 +179,7 @@ const handleExport = async () => {
         y += 12;
       } else {
         page.failures.forEach((failure, i) => {
-          checkPageBreak(18);
+          checkPageBreak(24);
 
           setStyle(10, [76, 6, 29], true);
           doc.text(
@@ -170,6 +188,23 @@ const handleExport = async () => {
             y + 4
           );
           y += 8;
+
+          setStyle(8.5, [85, 85, 85]);
+          doc.text(
+            `WCAG ${failure.criterion.level} | ${failure.criterion.principle} | ${failure.criterion.guideline}`,
+            margin + 6,
+            y
+          );
+          y += 5;
+
+          const descriptionLines = doc.splitTextToSize(
+            failure.criterion.description,
+            contentWidth - 6
+          );
+          checkPageBreak(descriptionLines.length * 4.2 + 5);
+          setStyle(9, [60, 60, 60]);
+          doc.text(descriptionLines, margin + 6, y);
+          y += descriptionLines.length * 4.2 + 3;
 
           if (failure.result.severity) {
             setStyle(9, [100, 100, 100]);
@@ -233,6 +268,7 @@ const handleExport = async () => {
         className="btn btn-outline"
         onClick={handleCopyLink}
       >
+        <ClipboardIcon size={16} />
         Copy Share Link
       </button>
       <button
@@ -241,7 +277,8 @@ const handleExport = async () => {
         disabled={isExporting}
         aria-busy={isExporting}
       >
-        {isExporting ? 'Exporting…' : 'Export PDF'}
+        <DownloadIcon size={16} />
+        {isExporting ? 'Downloading…' : 'Download PDF'}
       </button>
     </div>
   );

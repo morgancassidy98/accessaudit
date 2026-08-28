@@ -180,6 +180,24 @@ export function DocumentCheckIcon(props: IconProps) {
   );
 }
 
+export function ClipboardIcon(props: IconProps) {
+  return (
+    <IconBase {...props}>
+      <rect x="5" y="4" width="14" height="17" rx="2" />
+      <path d="M9 4V3H15V4M9 9H15M9 13H15M9 17H13" />
+    </IconBase>
+  );
+}
+
+export function DownloadIcon(props: IconProps) {
+  return (
+    <IconBase {...props}>
+      <path d="M12 3V15M7 10L12 15L17 10" />
+      <path d="M5 20H19" />
+    </IconBase>
+  );
+}
+
 export function GitHubIcon({ size = 18, className }: IconProps) {
   return (
     <svg
