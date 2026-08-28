@@ -1,15 +1,11 @@
 import { signIn } from '@/lib/auth';
+import { GitHubIcon, GoogleIcon } from '@/components/icons';
+import styles from './page.module.css';
 
 export default function LoginPage() {
   return (
-    <div style={{
-      minHeight: '100vh',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      background: 'var(--color-bg)',
-    }}>
-      <div className="card" style={{ width: '100%', maxWidth: '400px', padding: '40px' }}>
+    <div className={styles.shell}>
+      <div className={`card ${styles.card}`}>
         <h1 style={{
           fontFamily: 'var(--font-display)',
           fontSize: '32px',
@@ -27,7 +23,8 @@ export default function LoginPage() {
             'use server';
             await signIn('github', { redirectTo: '/' });
           }}>
-            <button className="btn btn-primary w-full" type="submit">
+            <button className={`btn btn-primary w-full ${styles.providerButton}`} type="submit">
+              <GitHubIcon size={24} />
               Continue with GitHub
             </button>
           </form>
@@ -36,7 +33,8 @@ export default function LoginPage() {
             'use server';
             await signIn('google', { redirectTo: '/' });
           }}>
-            <button className="btn btn-outline w-full" type="submit">
+            <button className={`btn btn-outline w-full ${styles.providerButton}`} type="submit">
+              <GoogleIcon size={24} />
               Continue with Google
             </button>
           </form>

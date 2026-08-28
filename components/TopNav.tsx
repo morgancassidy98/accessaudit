@@ -2,7 +2,8 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { signOut, useSession } from 'next-auth/react';
+import { signIn, signOut, useSession } from 'next-auth/react';
+import { GitHubIcon, GoogleIcon } from '@/components/icons';
 
 const navItems = [
   { href: '/',          label: 'Dashboard' },
@@ -11,6 +12,7 @@ const navItems = [
 
 export function TopNav() {
   const pathname = usePathname();
+  const { status } = useSession();
 
   return (
     <header className="topnav" role="banner">
@@ -23,23 +25,40 @@ export function TopNav() {
         </div>
 
         <nav className="topnav-links" aria-label="Main navigation">
-          {navItems.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={`topnav-link ${pathname === item.href ? 'active' : ''}`}
-              aria-current={pathname === item.href ? 'page' : undefined}
-            >
-              {item.label}
-            </Link>
-          ))}
-          <button
+          {status === 'authenticated' && navItems.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`topnav-link ${pathname === item.href ? 'active' : ''}`}
+                aria-current={pathname === item.href ? 'page' : undefined}
+              >
+                {item.label}
+              </Link>
+            ))}
+          {status !== 'authenticated' && (
+            <details className="topnav-auth">
+              <summary className="btn btn-outline topnav-signin">Sign In</summary>
+              <div className="topnav-auth-menu">
+                <button type="button" onClick={() => signIn('github', { callbackUrl: '/' })}>
+                  <GitHubIcon size={20} />
+                  <span>GitHub</span>
+                </button>
+                <button type="button" onClick={() => signIn('google', { callbackUrl: '/' })}>
+                  <GoogleIcon size={20} />
+                  <span>Google</span>
+                </button>
+              </div>
+            </details>
+          )}
+          {status === 'authenticated' && (
+            <button
+              type="button"
               onClick={() => signOut({ callbackUrl: '/login' })}
-              className="topnav-link"
-              style={{ background: 'none', border: 'none', cursor: 'pointer' }}
+              className="btn btn-outline topnav-signin"
             >
               Sign Out
             </button>
+          )}
         </nav>
       </div>
     </header>

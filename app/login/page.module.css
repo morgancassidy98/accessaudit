@@ -1,0 +1,36 @@
+.shell {
+  min-height: calc(100vh - 60px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  background: var(--color-bg);
+}
+
+.card {
+  width: min(100%, 480px);
+  padding: clamp(32px, 5vw, 56px);
+}
+
+.providerButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 44px;
+}
+
+.providerButton svg {
+  flex: 0 0 24px;
+}
+
+@media (max-width: 420px) {
+  .shell {
+    align-items: flex-start;
+    padding: 20px 12px 32px;
+  }
+
+  .card {
+    padding: 24px 18px;
+  }
+}
