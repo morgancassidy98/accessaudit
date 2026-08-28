@@ -67,8 +67,8 @@ export default function NewAuditPage() {
             WCAG Accessibility Audit Tracker and Reporting Tool
           </p>
         </div>
-        <Link href="/" className="btn btn-outline">
-          <span className="flex items-center gap-2">
+        <Link href="/" className="btn btn-outline back-button">
+          <span className="back-button-content gap-2">
             <span aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15 18L9 12L15 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg></span>
             <span>Back</span>
           </span>

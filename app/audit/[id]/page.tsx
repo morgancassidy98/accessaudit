@@ -79,8 +79,8 @@ export default async function AuditPage({
         <Link href={`/audit/${id}/report`} className="btn btn-outline">
           View Report
         </Link>
-        <Link href="/" className="btn btn-outline flex-shrink-0">
-          <span className="flex items-center gap-2">
+        <Link href="/" className="btn btn-outline back-button flex-shrink-0">
+          <span className="back-button-content gap-2">
             <ArrowLeftIcon size={14} />
             <span>Back</span>
           </span>
@@ -113,8 +113,22 @@ export default async function AuditPage({
           </div>
         </div>
 
-        {/* Pages */}
+        {/* Add page form */}
         <div className="card mb-6">
+          <div className="card-header">
+            <h2>Add a Page</h2>
+            <p className="text-muted mt-2" style={{ fontSize: '14px' }}>
+              Add each page you want to audit. Each page will have its own
+              guided checklist of {wcagCriteria.length} WCAG accessibility criteria.
+            </p>
+          </div>
+          <div className="card-body">
+            <AddPageForm auditId={audit.id} baseUrl={audit.url} />
+          </div>
+        </div>
+
+        {/* Pages */}
+        <div className="card">
           <div className="card-header flex items-center justify-between">
             <h2>Pages</h2>
             <span className="text-muted" style={{ fontSize: '14px' }}>
@@ -127,27 +141,13 @@ export default async function AuditPage({
               <div className="empty-state-icon"><FileIcon size={24} /></div>
               <h3>No pages yet</h3>
               <p>
-                Add the pages you want to audit below. Each page gets its
-                own guided WCAG 2.1 checklist.
+                Add the pages you want to audit using the form above. Each page
+                gets its own guided WCAG 2.1 checklist.
               </p>
             </div>
           ) : (
             <PageList pages={pagesWithStats} auditId={audit.id} />
           )}
-        </div>
-
-        {/* Add page form */}
-        <div className="card">
-          <div className="card-header">
-            <h2>Add a Page</h2>
-            <p className="text-muted mt-2" style={{ fontSize: '14px' }}>
-              Add each page you want to audit. Each page will have its own
-              guided checklist of {wcagCriteria.length} WCAG accessibility criteria.
-            </p>
-          </div>
-          <div className="card-body">
-            <AddPageForm auditId={audit.id} baseUrl={audit.url} />
-          </div>
         </div>
 
       </div>

@@ -36,7 +36,7 @@ export function TopNav() {
               </Link>
             ))}
           {status !== 'authenticated' && (
-            <details className="topnav-auth">
+            <details className="topnav-auth topnav-account-action">
               <summary className="btn btn-outline topnav-signin">Sign In</summary>
               <div className="topnav-auth-menu">
                 <button type="button" onClick={() => signIn('github', { callbackUrl: '/' })}>
@@ -54,7 +54,7 @@ export function TopNav() {
             <button
               type="button"
               onClick={() => signOut({ callbackUrl: '/login' })}
-              className="btn btn-outline topnav-signin"
+              className="btn btn-outline topnav-signin topnav-account-action"
             >
               Sign Out
             </button>

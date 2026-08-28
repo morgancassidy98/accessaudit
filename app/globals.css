@@ -364,6 +364,10 @@ select.form-input {
   position: relative;
 }
 
+.topnav-account-action {
+  margin-left: 20px;
+}
+
 .topnav-auth summary {
   list-style: none;
 }
@@ -453,6 +457,18 @@ select.form-input {
   padding: 8px;
   border-radius: var(--radius);
   aspect-ratio: 1;
+}
+
+.back-button {
+  justify-content: center;
+  text-align: center;
+}
+
+.back-button-content {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
 }
 
 /* ── Form elements ── */
@@ -1295,6 +1311,10 @@ select.form-input {
     width: 100%;
     margin-left: 0;
     justify-content: flex-end;
+  }
+
+  .topnav-account-action {
+    margin-left: 12px;
   }
 
   .stat-grid {

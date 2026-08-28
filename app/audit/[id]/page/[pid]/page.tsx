@@ -88,15 +88,17 @@ export default async function ChecklistPage({
         <div className="flex items-center gap-3" style={{ minWidth: 0 }}>
           <Link
             href={`/audit/${id}`}
-            className="btn btn-ghost btn-sm"
+            className="btn btn-ghost btn-sm back-button"
             style={{ flexShrink: 0 }}
           >
-            <span aria-hidden="true" style={{ display: 'inline-flex', alignItems: 'center' }}>
-              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: '6px' }}>
-                <path d="M15 18L9 12L15 6" />
-              </svg>
+            <span className="back-button-content">
+              <span aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: '6px' }}>
+                  <path d="M15 18L9 12L15 6" />
+                </svg>
+              </span>
+              <span>Back</span>
             </span>
-            Back
           </Link>
           <div style={{ minWidth: 0 }}>
             <div style={{
