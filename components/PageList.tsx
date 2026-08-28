@@ -48,8 +48,8 @@ function DeletePageButton({
 
   if (confirming) {
     return (
-      <div className="flex gap-2 items-center">
-        <span className="text-muted" style={{ whiteSpace: 'nowrap' }}>Remove?</span>
+      <div className="page-remove-confirm flex gap-2 items-center">
+        <span className="text-muted">Remove?</span>
         <button
           className="btn btn-danger btn-sm"
           onClick={handleDelete}
@@ -204,7 +204,7 @@ export function PageList({
 
           {/* Actions */}
           <div className="mt-4">
-            <div className="flex gap-2 items-center">
+            <div className="page-row-actions flex gap-2 items-center">
               <Link
                 href={`/audit/${auditId}/page/${page.id}`}
                 className="btn btn-primary btn-sm"

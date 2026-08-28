@@ -65,7 +65,7 @@ export function AddPageForm({
     <form onSubmit={handleSubmit} noValidate>
       <div className="flex-col gap-4" style={{ display: 'flex' }}>
 
-        <div style={{
+        <div className="add-page-fields" style={{
           display: 'grid',
           gridTemplateColumns: '1fr 1fr',
           gap: '16px',
