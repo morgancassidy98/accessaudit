@@ -12,7 +12,11 @@ const navItems = [
 
 export function TopNav() {
   const pathname = usePathname();
-  const { status } = useSession();
+  const { data: session, status } = useSession();
+
+  // Don't render nav for unauthenticated users
+  // (middleware handles redirect, this prevents flash)
+  if (status === 'unauthenticated') return null;
 
   return (
     <header className="topnav" role="banner">
@@ -25,39 +29,50 @@ export function TopNav() {
         </div>
 
         <nav className="topnav-links" aria-label="Main navigation">
-          {status === 'authenticated' && navItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`topnav-link ${pathname === item.href ? 'active' : ''}`}
-                aria-current={pathname === item.href ? 'page' : undefined}
-              >
-                {item.label}
-              </Link>
-            ))}
-          {status !== 'authenticated' && (
-            <details className="topnav-auth topnav-account-action">
-              <summary className="btn btn-outline topnav-signin">Sign In</summary>
-              <div className="topnav-auth-menu">
-                <button type="button" onClick={() => signIn('github', { callbackUrl: '/' })}>
-                  <GitHubIcon size={20} />
-                  <span>GitHub</span>
-                </button>
-                <button type="button" onClick={() => signIn('google', { callbackUrl: '/' })}>
-                  <GoogleIcon size={20} />
-                  <span>Google</span>
+          {status === 'loading' && (
+            <div style={{
+              width: '80px',
+              height: '32px',
+              background: 'rgba(255,255,255,0.1)',
+              borderRadius: 'var(--radius)',
+            }} aria-hidden="true" />
+          )}
+
+          {status === 'authenticated' && (
+            <>
+              {navItems.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={`topnav-link ${pathname === item.href ? 'active' : ''}`}
+                  aria-current={pathname === item.href ? 'page' : undefined}
+                >
+                  {item.label}
+                </Link>
+              ))}
+
+              <div className="flex items-center gap-3" style={{ marginLeft: '8px' }}>
+                {session?.user?.image && (
+                  <img
+                    src={session.user.image}
+                    alt={session.user.name ?? 'User avatar'}
+                    style={{
+                      width: '28px',
+                      height: '28px',
+                      borderRadius: '50%',
+                      border: '2px solid rgba(255,255,255,0.3)',
+                    }}
+                  />
+                )}
+                <button
+                  type="button"
+                  onClick={() => signOut({ callbackUrl: '/login' })}
+                  className="btn btn-outline topnav-signin"
+                >
+                  Sign Out
                 </button>
               </div>
-            </details>
-          )}
-          {status === 'authenticated' && (
-            <button
-              type="button"
-              onClick={() => signOut({ callbackUrl: '/login' })}
-              className="btn btn-outline topnav-signin topnav-account-action"
-            >
-              Sign Out
-            </button>
+            </>
           )}
         </nav>
       </div>
