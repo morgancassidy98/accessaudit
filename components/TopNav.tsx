@@ -52,18 +52,22 @@ export function TopNav() {
               ))}
 
               <div className="flex items-center gap-3" style={{ marginLeft: '8px' }}>
-                {session?.user?.image && (
-                  <img
-                    src={session.user.image}
-                    alt={session.user.name ?? 'User avatar'}
-                    style={{
-                      width: '28px',
-                      height: '28px',
-                      borderRadius: '50%',
-                      border: '2px solid rgba(255,255,255,0.3)',
-                    }}
-                  />
-                )}
+               {session?.user?.image && (
+  <Link href="/profile">
+    <img
+      src={session.user.image}
+      alt={session.user.name ?? 'User avatar'}
+      style={{
+        width: '28px',
+        height: '28px',
+        borderRadius: '50%',
+        border: '2px solid rgba(255,255,255,0.3)',
+        cursor: 'pointer',
+        transition: 'border-color var(--transition)',
+      }}
+    />
+  </Link>
+)}
                 <button
                   type="button"
                   onClick={() => signOut({ callbackUrl: '/login' })}
