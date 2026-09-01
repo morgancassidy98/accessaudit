@@ -175,6 +175,12 @@ export function AuditTable({ audits }: { audits: AuditWithStats[] }) {
             >
               Open Audit
             </Link>
+              <Link
+    href={`/audit/${audit.id}/report`}
+    className="btn btn-ghost btn-sm"
+  >
+    View Report
+  </Link>
             <DeleteButton auditId={audit.id} auditName={audit.name} />
           </div>
 
