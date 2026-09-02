@@ -116,8 +116,6 @@ select.form-input {
 .topnav {
   background: var(--color-sidebar);
   border-bottom: 1px solid rgba(255,255,255,0.08);
-  position: sticky;
-  top: 0;
   z-index: 100;
   flex-shrink: 0;
 }
@@ -239,11 +237,6 @@ select.form-input {
     width: auto;
     margin-left: auto;
     justify-content: flex-end;
-  }
-
-  /* Hide Dashboard link on very small screens — just show New Audit */
-  .topnav-link:not(.active):not(:last-of-type) {
-    display: none;
   }
 }
 
@@ -852,12 +845,47 @@ a:focus-visible {
   scrollbar-gutter: stable;
 }
 
+.checklist-nav-toggle {
+  display: none;
+}
+
 @media (max-width: 768px) {
   .checklist-nav {
     max-height: 180px;
     width: 100%;
     border-right: none;
     border-bottom: 1px solid var(--color-border);
+  }
+
+  .checklist-nav-toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    min-height: 44px;
+    padding: 10px 14px;
+    border: 0;
+    border-bottom: 1px solid var(--color-border);
+    background: var(--color-surface);
+    color: var(--color-on-light);
+    font-size: 13px;
+    font-weight: var(--font-weight-medium);
+    letter-spacing: var(--letter-spacing-wider);
+    text-align: left;
+    text-transform: uppercase;
+  }
+
+  .checklist-nav-toggle-count {
+    color: #4a4a4a;
+    font-weight: var(--font-weight-regular);
+  }
+
+  .checklist-nav-toggle .checklist-nav-group-caret {
+    margin-left: auto;
+  }
+
+  .checklist-nav[hidden] {
+    display: none;
   }
 
   .checklist-nav-scroll-hint {
@@ -1664,4 +1692,166 @@ input[type="radio"] {
   cursor: pointer;
   min-height: 44px;
   min-width: 44px;
+}
+
+/* Keep dense workflows usable on narrow screens. */
+@media (max-width: 768px) {
+  .topnav-inner {
+    flex-wrap: nowrap;
+    gap: 8px;
+  }
+
+  .topnav-links {
+    width: auto;
+    flex-wrap: nowrap;
+    gap: 2px;
+  }
+
+  .topnav-links .topnav-link {
+    display: flex;
+  }
+
+  .topnav-link {
+    padding: 5px 7px;
+    font-size: 12px;
+  }
+
+  .page-header {
+    align-items: stretch;
+  }
+
+  .page-header > div:first-child {
+    min-width: 0;
+  }
+
+  .page-header > .btn,
+  .page-header > .flex {
+    width: 100%;
+    align-self: stretch;
+  }
+
+  .page-header > .btn {
+    white-space: normal;
+  }
+
+  .report-header-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .report-header-actions > * {
+    width: 100%;
+  }
+
+  .audit-row-stats,
+  .page-row-stats {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .audit-row-actions,
+  .page-row-actions {
+    width: 100%;
+  }
+
+  .audit-row-actions > .btn,
+  .page-row-actions > .btn {
+    flex: 1 1 140px;
+  }
+
+  .page-row-actions > .page-remove-confirm {
+    flex: 1 1 100%;
+  }
+
+  .checklist-topbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .checklist-topbar > .flex {
+    width: 100%;
+  }
+
+  .checklist-topbar-actions {
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+
+  .checklist-topbar-actions > .btn {
+    flex: 1 1 130px;
+  }
+
+  .checklist-progress {
+    width: 100%;
+    order: 3;
+  }
+
+  .checklist-nav {
+    max-height: 180px;
+  }
+
+  .criterion-nav .btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 400px) {
+  .topnav-brand-name {
+    font-size: 17px;
+  }
+
+  .topnav-link {
+    padding-inline: 5px;
+    font-size: 11px;
+  }
+
+  .topnav-signin {
+    padding-inline: 7px;
+    font-size: 11px;
+  }
+
+  .stat-card {
+    padding: 14px 12px;
+  }
+
+  .stat-card-label {
+    font-size: 11px;
+    letter-spacing: 0.06em;
+  }
+}
+
+/* Let the checklist use the document scroll instead of trapping the criteria panel. */
+.checklist-shell {
+  height: auto;
+  min-height: 100vh;
+  overflow: visible;
+}
+
+.checklist-body {
+  overflow: visible;
+}
+
+.checklist-main,
+.checklist-nav {
+  overflow: visible;
+}
+
+@media (max-width: 768px) {
+  .topnav-brand {
+    min-width: 0;
+  }
+
+  .topnav-brand-link {
+    white-space: nowrap;
+  }
+
+  .topnav-links {
+    margin-left: auto;
+    justify-content: flex-end;
+  }
+
+  .checklist-nav {
+    max-height: none;
+  }
 }

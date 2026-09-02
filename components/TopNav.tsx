@@ -44,7 +44,7 @@ export function TopNav() {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`topnav-link ${pathname === item.href ? 'active' : ''}`}
+                  className={`topnav-link ${item.href === '/' ? 'topnav-dashboard-link' : ''} ${pathname === item.href ? 'active' : ''}`}
                   aria-current={pathname === item.href ? 'page' : undefined}
                 >
                   {item.label}

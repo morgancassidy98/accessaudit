@@ -36,6 +36,7 @@ export function ChecklistNav({
   pageId: string;
 }) {
   const [isMobile, setIsMobile] = useState(false);
+  const [isNavOpen, setIsNavOpen] = useState(false);
   const [collapsedGroups, setCollapsedGroups] = useState<Record<string, boolean>>({
     Perceivable: false,
     Operable: false,
@@ -51,9 +52,7 @@ export function ChecklistNav({
       setCollapsedGroups((current) => {
         const nextState = { ...current };
         principles.forEach((principle) => {
-          if (mobile && typeof nextState[principle] === 'undefined') {
-            nextState[principle] = true;
-          }
+          nextState[principle] = mobile;
         });
         return nextState;
       });
@@ -72,19 +71,37 @@ export function ChecklistNav({
   };
 
   return (
-    <nav
-      className="checklist-nav"
-      aria-label="WCAG criteria navigation"
-    >
-      <div className="checklist-nav-scroll-hint" aria-hidden="true">
-        <span>Scroll for more criteria</span>
-      </div>
+    <>
+      <button
+        type="button"
+        className="checklist-nav-toggle"
+        onClick={() => setIsNavOpen((open) => !open)}
+        aria-expanded={isMobile ? isNavOpen : true}
+        aria-controls="checklist-criteria-nav"
+      >
+        <span>Criteria</span>
+        <span className="checklist-nav-toggle-count">{criteria.length}</span>
+        <span className="checklist-nav-group-caret" aria-hidden="true">
+          {isNavOpen ? <ChevronDownIcon size={16} /> : <ChevronRightIcon size={16} />}
+        </span>
+      </button>
 
-      {principles.map((principle) => {
+      <nav
+        id="checklist-criteria-nav"
+        className={`checklist-nav ${isNavOpen ? 'open' : ''}`}
+        aria-label="WCAG criteria navigation"
+        hidden={isMobile && !isNavOpen}
+      >
+        <div className="checklist-nav-scroll-hint" aria-hidden="true">
+          <span>Scroll for more criteria</span>
+        </div>
+
+        {principles.map((principle) => {
         const group = criteria.filter((c) => c.principle === principle);
         if (group.length === 0) return null;
 
-        const isCollapsed = collapsedGroups[principle] ?? (isMobile ? true : false);
+        const isCollapsed = (collapsedGroups[principle] ?? (isMobile ? true : false))
+          && !group.some((criterion) => criterion.id === activeCriterionId);
 
         return (
           <div key={principle} className="checklist-nav-group">
@@ -118,6 +135,7 @@ export function ChecklistNav({
                       href={`/audit/${auditId}/page/${pageId}?criterion=${criterion.id}`}
                       className={`checklist-nav-item ${isActive ? 'active' : ''}`}
                       aria-current={isActive ? 'true' : undefined}
+                      onClick={() => setIsNavOpen(false)}
                     >
                       <span
                         className="checklist-nav-status"
@@ -147,7 +165,8 @@ export function ChecklistNav({
             )}
           </div>
         );
-      })}
-    </nav>
+        })}
+      </nav>
+    </>
   );
 }

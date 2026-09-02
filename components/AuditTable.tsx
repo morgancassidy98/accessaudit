@@ -168,7 +168,7 @@ export function AuditTable({ audits }: { audits: AuditWithStats[] }) {
           </div>
 
           {/* Actions row */}
-          <div className="flex gap-2 items-center mt-4">
+          <div className="audit-row-actions flex gap-2 items-center mt-4">
             <Link
               href={`/audit/${audit.id}`}
               className="btn btn-outline btn-sm"
