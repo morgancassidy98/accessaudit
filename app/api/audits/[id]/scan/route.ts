@@ -21,13 +21,59 @@ type PageSpeedResponse = {
   };
 };
 
+type ScanRequest = {
+  pageId: string;
+  url: string;
+};
+
+function isScanRequest(value: unknown): value is ScanRequest {
+  if (!value || typeof value !== 'object') return false;
+  const body = value as Record<string, unknown>;
+  return typeof body.pageId === 'string' && typeof body.url === 'string';
+}
+
+function parseScanUrl(value: string): string | null {
+  if (value.length > 2048) return null;
+
+  try {
+    const parsed = new URL(value);
+    const hostname = parsed.hostname.toLowerCase();
+    const isLocalHost = hostname === 'localhost'
+      || hostname.endsWith('.localhost')
+      || hostname === '::1'
+      || hostname === '0.0.0.0'
+      || hostname.startsWith('127.');
+
+    if (!['http:', 'https:'].includes(parsed.protocol) || parsed.username || parsed.password || isLocalHost) {
+      return null;
+    }
+
+    return parsed.toString();
+  } catch {
+    return null;
+  }
+}
+
 export async function POST(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const { id } = await params;
-    const { pageId, url } = await request.json();
+    const body: unknown = await request.json().catch(() => null);
+    if (!isScanRequest(body) || !body.pageId.trim() || !body.url.trim()) {
+      return NextResponse.json({ error: 'Page ID and URL are required.' }, { status: 400 });
+    }
+
+    const scanUrl = parseScanUrl(body.url.trim());
+    if (!scanUrl) {
+      return NextResponse.json(
+        { error: 'Please provide a valid public HTTP or HTTPS URL.' },
+        { status: 400 }
+      );
+    }
+
+    const pageId = body.pageId.trim();
     const userId = await getAuthenticatedUserId();
     if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
@@ -38,7 +84,7 @@ export async function POST(
     if (!page) return NextResponse.json({ error: 'Page not found' }, { status: 404 });
 
     const apiKey = process.env.PAGESPEED_API_KEY ?? process.env.NEXT_PUBLIC_PAGESPEED_API_KEY ?? '';
-    const apiUrl = `https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${encodeURIComponent(url)}&category=accessibility&strategy=mobile${apiKey ? `&key=${apiKey}` : ''}`;
+    const apiUrl = `https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${encodeURIComponent(scanUrl)}&category=accessibility&strategy=mobile${apiKey ? `&key=${apiKey}` : ''}`;
 
     // Use a slightly longer timeout than the previous 9s to avoid aborting slow
     // PageSpeed responses while still keeping the request bounded.
@@ -83,59 +129,51 @@ export async function POST(
       return NextResponse.json({ error: scanError }, { status: 502 });
     }
 
-    // Update page with whatever we got
-    await prisma.page.update({
-      where: { id: pageId },
-      data: {
-        lighthouseScore: score,
-        lighthouseData: lighthouseData ? JSON.stringify(lighthouseData) : null,
-        w3cErrors: null,
-        scannedAt: new Date(),
-      },
-    });
+    const scannedAt = new Date();
+    await prisma.$transaction(async (tx) => {
+      const page = await tx.page.findFirst({
+        where: { id: pageId, auditId: id, audit: { userId } },
+        include: { results: true },
+      });
+      if (!page) throw new Error('Page not found');
 
- // Map failed Lighthouse audits to WCAG criteria
+      await tx.page.update({
+        where: { id: pageId },
+        data: {
+          lighthouseScore: score,
+          lighthouseData: lighthouseData ? JSON.stringify(lighthouseData) : null,
+          w3cErrors: null,
+          scannedAt,
+        },
+      });
 
+      if (!lighthouseData) return;
 
-  if (lighthouseData) {
-  const page = await prisma.page.findUnique({
-    where: { id: pageId },
-    include: { results: true },
-  });
+      for (const [auditId, audit] of Object.entries(lighthouseData)) {
+        if (audit.score === null) continue;
+        const passed = audit.score >= 1;
+        const criterionIds = lighthouseAuditMap[auditId] ?? [];
 
-  if (page) {
-    const scoredAudits = Object.entries(lighthouseData)
-      .filter(([, audit]) => audit.score !== null)
-      .map(([auditId, audit]) => ({
-        auditId,
-        passed: (audit.score as number) >= 1,
-      }));
-
-    for (const { auditId, passed } of scoredAudits) {
-      const criterionIds = lighthouseAuditMap[auditId] ?? [];
-      for (const criterionId of criterionIds) {
-        const result = page.results.find((r) => r.criterionId === criterionId);
-        if (result && result.status === 'untested') {
-          await prisma.result.update({
-            where: { id: result.id },
-            data: {
-              status: passed ? 'pass' : 'fail',
-              automatedStatus: passed ? 'pass' : 'fail',
-              automatedSource: 'lighthouse',
-            },
-          });
+        for (const criterionId of criterionIds) {
+          const result = page.results.find((item) => item.criterionId === criterionId);
+          if (result?.status === 'untested') {
+            await tx.result.update({
+              where: { id: result.id },
+              data: {
+                status: passed ? 'pass' : 'fail',
+                automatedStatus: passed ? 'pass' : 'fail',
+                automatedSource: 'lighthouse',
+              },
+            });
+          }
         }
       }
-    }
-  }
-}
-
-  
+    });
 
     return NextResponse.json({
       score,
       failedAudits,
-      scannedAt: new Date(),
+      scannedAt,
     });
 
   } catch (error) {
