@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { prisma } from '@/lib/prisma';
 import { wcagCriteria } from '@/lib/wcag-criteria';
 import { AddPageForm } from '@/components/AddPageForm';
+import { PageDiscovery } from '@/components/PageDiscovery';
 import { PageList } from '@/components/PageList';
 import { ArrowLeftIcon, FileIcon } from '@/components/icons';
 import { getAuthenticatedUserId } from '@/lib/ownership';
@@ -115,22 +116,8 @@ export default async function AuditPage({
           </div>
         </div>
 
-        {/* Add page form */}
-        <div className="card mb-6">
-          <div className="card-header">
-            <h2>Add a Page</h2>
-            <p className="text-muted mt-2" style={{ fontSize: '14px' }}>
-              Add each page you want to audit. Each page will have its own
-              guided checklist of {wcagCriteria.length} WCAG accessibility criteria.
-            </p>
-          </div>
-          <div className="card-body">
-            <AddPageForm auditId={audit.id} baseUrl={audit.url} />
-          </div>
-        </div>
-
         {/* Pages */}
-        <div className="card">
+        <div className="card mb-6">
           <div className="card-header flex items-center justify-between">
             <h2>Pages</h2>
             <span className="text-muted" style={{ fontSize: '14px' }}>
@@ -143,13 +130,32 @@ export default async function AuditPage({
               <div className="empty-state-icon"><FileIcon size={24} /></div>
               <h3>No pages yet</h3>
               <p>
-                Add the pages you want to audit using the form above. Each page
+                Add the pages you want to audit using the tools below. Each page
                 gets its own guided WCAG 2.1 checklist.
               </p>
             </div>
           ) : (
             <PageList pages={pagesWithStats} auditId={audit.id} />
           )}
+        </div>
+
+        {/* Add and discover pages */}
+        <div className="card">
+          <div className="card-header">
+            <h2>Add Pages</h2>
+            <p className="text-muted mt-2 text-small">
+              Find pages automatically or add one manually. Each page gets its own
+              guided checklist of {wcagCriteria.length} WCAG accessibility criteria.
+            </p>
+          </div>
+          <div className="card-body page-add-tools">
+            <PageDiscovery auditId={audit.id} />
+            <div className="page-manual-add">
+              <div className="page-tool-kicker">Manual entry</div>
+              <h3>Add a page manually</h3>
+              <AddPageForm auditId={audit.id} baseUrl={audit.url} />
+            </div>
+          </div>
         </div>
 
       </div>

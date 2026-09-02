@@ -872,6 +872,137 @@ a:focus-visible {
   flex-wrap: wrap;
 }
 
+.page-add-tools {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.page-discovery {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.page-discovery-intro,
+.page-discovery-results-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.page-discovery h3,
+.page-manual-add h3,
+.page-discovery-results h4 {
+  margin-bottom: 5px;
+  font-family: var(--font-display);
+  font-size: 20px;
+}
+
+.page-tool-kicker {
+  margin-bottom: 4px;
+  color: var(--color-primary);
+  font-size: 12px;
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-widest);
+  text-transform: uppercase;
+}
+
+.page-discovery p,
+.page-manual-add p,
+.page-discovery-results p {
+  font-size: 14px;
+}
+
+.page-discovery-results {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding-top: 20px;
+  border-top: 1px solid var(--color-border);
+}
+
+.page-discovery-list {
+  display: flex;
+  flex-direction: column;
+  max-height: 420px;
+  overflow-y: auto;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+}
+
+.page-discovery-select-all {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  gap: 9px;
+  padding: 12px 14px;
+  color: var(--color-primary);
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: var(--font-weight-medium);
+}
+
+.page-discovery-select-all .page-discovery-checkbox,
+.page-discovery-item .page-discovery-checkbox {
+  box-sizing: border-box;
+  width: 18px;
+  height: 18px;
+  min-width: 18px;
+  min-height: 18px;
+  margin: 2px 0 0;
+  accent-color: var(--color-primary);
+}
+
+.page-discovery-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--color-border);
+  cursor: pointer;
+}
+
+.page-discovery-item:last-child { border-bottom: none; }
+.page-discovery-item:hover { background: var(--color-ghost-hover); }
+
+.page-discovery-item input {
+  flex-shrink: 0;
+}
+
+.page-discovery-item-copy {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  gap: 2px;
+}
+
+.page-discovery-item-copy strong {
+  font-size: 15px;
+  font-weight: var(--font-weight-medium);
+}
+
+.page-discovery-item-copy span {
+  overflow-wrap: anywhere;
+  color: #555;
+  font-size: 13px;
+}
+
+.page-discovery-empty {
+  padding-top: 4px;
+}
+
+.page-manual-add {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding-top: 24px;
+  border-top: 1px solid var(--color-border);
+}
+
+.page-manual-add h3 { margin-bottom: 0; }
+
 /* ── Checklist Shell ── */
 .checklist-shell {
   display: flex;
@@ -1577,6 +1708,16 @@ a:focus-visible {
     grid-template-columns: 1fr !important;
   }
 
+  .page-discovery-intro,
+  .page-discovery-results-header {
+    flex-direction: column;
+  }
+
+  .page-discovery-intro > .btn,
+  .page-discovery-results-header > .btn {
+    width: 100%;
+  }
+
   .checklist-body {
     flex-direction: column;
   }
@@ -1983,6 +2124,16 @@ input[type="radio"] {
     font-size: 11px;
     letter-spacing: 0.06em;
   }
+}
+
+/* Discovery checkboxes are compact controls, not full-size form fields. */
+.page-discovery-item input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  min-width: 18px;
+  min-height: 18px;
+  margin: 2px 0 0;
+  accent-color: var(--color-primary);
 }
 
 /* Let the checklist use the document scroll instead of trapping the criteria panel. */
