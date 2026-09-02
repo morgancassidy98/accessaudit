@@ -5,6 +5,22 @@ import { getAuthenticatedUserId } from '@/lib/ownership';
 
 export const maxDuration = 10;
 
+type LighthouseAudit = {
+  score: number | null;
+  [key: string]: unknown;
+};
+
+type LighthouseAudits = Record<string, LighthouseAudit>;
+
+type PageSpeedResponse = {
+  lighthouseResult?: {
+    categories?: {
+      accessibility?: { score?: number | null };
+    };
+    audits?: LighthouseAudits;
+  };
+};
+
 export async function POST(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
@@ -29,8 +45,8 @@ export async function POST(
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 15000);
 
-    let lighthouseData = null;
-    let score = null;
+    let lighthouseData: LighthouseAudits | null = null;
+    let score: number | null = null;
     let failedAudits: string[] = [];
     let scanError: string | null = null;
 
@@ -48,14 +64,14 @@ export async function POST(
         return NextResponse.json({ error: scanError }, { status: lighthouseRes.status });
       }
 
-      const data = await lighthouseRes.json();
+      const data = await lighthouseRes.json() as PageSpeedResponse;
       score = Math.round(
         (data.lighthouseResult?.categories?.accessibility?.score ?? 0) * 100
       );
       lighthouseData = data.lighthouseResult?.audits ?? {};
 
       failedAudits = Object.entries(lighthouseData)
-        .filter(([, audit]: [string, any]) => audit.score !== null && audit.score < 1)
+        .filter(([, audit]) => audit.score !== null && audit.score < 1)
         .map(([auditId]) => auditId);
     } catch (err) {
       clearTimeout(timeout);
@@ -89,8 +105,8 @@ export async function POST(
 
   if (page) {
     const scoredAudits = Object.entries(lighthouseData)
-      .filter(([, audit]: [string, any]) => audit.score !== null)
-      .map(([auditId, audit]: [string, any]) => ({
+      .filter(([, audit]) => audit.score !== null)
+      .map(([auditId, audit]) => ({
         auditId,
         passed: (audit.score as number) >= 1,
       }));

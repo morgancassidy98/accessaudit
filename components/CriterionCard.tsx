@@ -78,6 +78,8 @@ export function CriterionCard({
 
   // Reset state when criterion changes
   useEffect(() => {
+    // Local form state must follow the server-selected criterion.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setStatus(result?.status ?? 'untested');
     setSeverity(result?.severity ?? '');
     setNotes(result?.notes ?? '');

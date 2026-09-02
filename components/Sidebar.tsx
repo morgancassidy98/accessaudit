@@ -16,6 +16,8 @@ export function Sidebar() {
 
   // Close sidebar on route change
   useEffect(() => {
+    // Route changes must close the mobile navigation drawer.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsOpen(false);
   }, [pathname]);
 
