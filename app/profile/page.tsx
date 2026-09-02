@@ -86,44 +86,40 @@ export default async function ProfilePage() {
       <div className="page-body">
 
         {/* User info */}
-        <div className="card mb-6">
-          <div className="card-body">
-            <div className="flex items-center gap-5">
-              {user.image && (
-                <img
-                  src={user.image}
-                  alt={user.name ?? 'User avatar'}
-                  style={{
-                    width: '72px',
-                    height: '72px',
-                    borderRadius: '50%',
-                    border: '3px solid var(--color-border)',
-                    flexShrink: 0,
-                  }}
-                />
-              )}
-              <div>
-                <h1 style={{
-                  fontFamily: 'var(--font-display)',
-                  fontSize: '28px',
-                  marginBottom: '4px',
-                }}>
-                  {user.name ?? 'Anonymous User'}
-                </h1>
-                <div className="text-muted" style={{ fontSize: '15px' }}>
-                  {user.email}
-                </div>
-                <div className="flex gap-2 mt-3">
-                  {connectedProviders.map((provider) => (
-                    <span key={provider} className="badge badge-primary">
-                      {provider.charAt(0).toUpperCase() + provider.slice(1)}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+       <div className="flex items-center gap-5 mb-6">
+  {user.image && (
+    <img
+      src={user.image}
+      alt={user.name ?? 'User avatar'}
+      style={{
+        width: '80px',
+        height: '80px',
+        borderRadius: '50%',
+        border: '3px solid var(--color-border)',
+        flexShrink: 0,
+      }}
+    />
+  )}
+  <div style={{ paddingLeft: '8px' }}>
+    <h1 style={{
+      fontFamily: 'var(--font-display)',
+      fontSize: '28px',
+      marginBottom: '6px',
+    }}>
+      {user.name ?? 'Anonymous User'}
+    </h1>
+    <div className="text-muted" style={{ fontSize: '15px', marginBottom: '10px' }}>
+      {user.email}
+    </div>
+    <div className="flex gap-2">
+      {connectedProviders.map((provider) => (
+        <span key={provider} className="badge badge-primary">
+          {provider.charAt(0).toUpperCase() + provider.slice(1)}
+        </span>
+      ))}
+    </div>
+  </div>
+</div>
 
         {/* Stats */}
         <div className="stat-grid mb-6">

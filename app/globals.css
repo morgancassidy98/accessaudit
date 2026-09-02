@@ -194,6 +194,58 @@ select.form-input {
   outline: none;
   box-shadow: 0 0 0 2px rgba(255,255,255,0.5);
 }
+/* ── TopNav mobile ── */
+@media (max-width: 768px) {
+  .topnav-inner {
+    padding: 0 16px;
+    height: 56px;
+    min-height: 56px;
+    padding-top: 0;
+    padding-bottom: 0;
+    flex-wrap: nowrap; /* prevent wrapping */
+    gap: 8px;
+  }
+
+  .topnav-brand-tagline { display: none; }
+
+  .topnav-brand-name {
+    font-size: 18px; /* smaller on mobile */
+  }
+
+  .topnav-links {
+    flex-wrap: nowrap;
+    justify-content: flex-end;
+    margin-left: auto;
+    gap: 2px;
+  }
+
+  .topnav-link {
+    font-size: 13px;
+    padding: 5px 8px;
+  }
+
+  .topnav-signin {
+    font-size: 12px;
+    padding: 6px 10px;
+  }
+
+  .topnav-account-action {
+    margin-left: 4px;
+  }
+}
+
+@media (max-width: 480px) {
+  .topnav-links {
+    width: auto;
+    margin-left: auto;
+    justify-content: flex-end;
+  }
+
+  /* Hide Dashboard link on very small screens — just show New Audit */
+  .topnav-link:not(.active):not(:last-of-type) {
+    display: none;
+  }
+}
 
 /* ── Page Header ── */
 .page-header {
@@ -330,8 +382,21 @@ select.form-input {
 }
 
 .btn:focus-visible {
-  outline: none;
-  box-shadow: var(--focus-ring);
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  box-shadow: none;
+}
+
+.btn-primary:focus-visible,
+.btn-danger:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 2px;
+}
+
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
 }
 
 .btn:disabled {
@@ -515,13 +580,15 @@ select.form-input {
   transition: var(--transition);
   outline: none;
   width: 100%;
+  box-sizing: border-box;
 }
 
 .form-input::placeholder { color: #676767; }
 .form-input:hover  { border-color: var(--color-border-hover); }
-.form-input:focus  {
+.form-input:focus-visible  {
   border-color: var(--color-primary);
   box-shadow: var(--focus-ring);
+  outline: none;
 }
 
 .form-helper { font-size: 14px; color: #2f2f2f; line-height: 1.5; }
@@ -529,7 +596,7 @@ select.form-input {
 
 /* ── Progress bar ── */
 .progress-bar {
-  height: 7px;
+  height: 10px;
   background: #dde4ec;
   border-radius: var(--radius-pill);
   overflow: hidden;
@@ -721,12 +788,12 @@ select.form-input {
 
 .checklist-scan-notice {
   background: var(--color-warning-light);
-  border: 1px solid rgba(123,101,45,0.2);
+  border: 1px solid rgba(123,101,45,0.3);
   border-radius: 999px;
   padding: 6px 10px;
   font-size: 14px;
   line-height: 1.2;
-  color: #2d2416;
+  color: #1a1410;
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -1056,7 +1123,7 @@ select.form-input {
   padding: 4px 10px;
   border-radius: var(--radius-pill);
   white-space: nowrap;
-  width: 100%; 
+  max-width: 100%; 
   justify-content: center;
 }
 
@@ -1099,9 +1166,16 @@ select.form-input {
   align-items: flex-end;
 }
 
+@media (max-width: 640px) {
+  .contrast-inputs {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}
+
 .color-swatch {
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   border: 1px solid var(--color-border);
   border-radius: var(--radius);
   cursor: pointer;
@@ -1230,7 +1304,7 @@ select.form-input {
 
 .divider {
   height: 1px;
-  background: var(--color-border);
+  background: rgba(45, 93, 123, 0.35);
   margin: 24px 0;
 }
 
@@ -1369,6 +1443,86 @@ select.form-input {
     flex: 1;
     width: auto;
   }
+  /* ── Checklist topbar mobile — keep it compact ── */
+@media (max-width: 768px) {
+  .checklist-topbar {
+    padding: 8px 12px;
+    flex-direction: row; /* keep horizontal, don't stack */
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    font-size: 14px;
+  }
+
+  .checklist-topbar-actions {
+    width: 100%;
+    justify-content: space-between;
+    margin-left: 0;
+    flex-wrap: nowrap;
+    gap: 8px;
+  }
+
+  .checklist-progress {
+    width: 100%;
+    order: 2; /* move progress below the actions row */
+  }
+
+  .checklist-progress-main {
+    width: 100%;
+  }
+
+  .checklist-progress-main .progress-bar {
+    flex: 1;
+  }
+
+  .checklist-progress-meta {
+    font-size: 13px;
+    gap: 8px;
+  }
+
+  .checklist-scan-notice {
+    font-size: 12px;
+    padding: 4px 8px;
+  }
+
+  .checklist-scan-text {
+    display: none; /* hide the long text, just show the score badge */
+  }
+}
+/* ── Checklist nav mobile — much smaller ── */
+@media (max-width: 768px) {
+  .checklist-nav {
+    max-height: 120px; /* down from 180px */
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid var(--color-border);
+    padding: 4px 6px;
+  }
+
+  .checklist-nav-group-label {
+    font-size: 11px;
+    padding: 6px 8px 2px;
+  }
+
+  .checklist-nav-item {
+    padding: 4px 8px;
+    font-size: 13px;
+  }
+
+  .checklist-nav-id {
+    font-size: 13px;
+  }
+
+  .checklist-nav-status {
+    font-size: 13px;
+    width: 14px;
+  }
+
+  .checklist-nav-scroll-hint {
+    padding: 2px 8px 4px;
+    font-size: 10px;
+  }
+}
 
   .criterion-title { font-size: 22px; }
 
@@ -1384,6 +1538,35 @@ select.form-input {
   }
 
   .hide-mobile { display: none !important; }
+}
+/* ── Criterion card mobile ── */
+@media (max-width: 768px) {
+  .criterion-card {
+    padding: 16px 14px 32px;
+  }
+
+  .criterion-title {
+    font-size: 20px;
+    margin: 8px 0 6px;
+  }
+
+  .criterion-description {
+    font-size: 15px;
+  }
+
+  .criterion-header {
+    margin-bottom: 16px;
+    padding-bottom: 16px;
+  }
+
+  .criterion-section {
+    margin-bottom: 20px;
+  }
+
+  .criterion-lighthouse-banner {
+    padding: 12px 14px;
+    margin-bottom: 16px;
+  }
 }
 
 @media (max-width: 480px) {
@@ -1426,4 +1609,59 @@ select.form-input {
   .criterion-lighthouse-item {
     overflow-wrap: anywhere;
   }
+}
+
+@media (max-width: 640px) {
+  .page-header h1 { font-size: 26px; }
+  .criterion-title { font-size: 24px; }
+}
+
+@media (max-width: 360px) {
+  .stat-card-value { font-size: 28px; }
+  .page-header h1 { font-size: 18px; }
+  .criterion-title { font-size: 18px; }
+  .btn { font-size: 11px; padding: 8px 12px; }
+}
+
+@media (max-width: 640px) {
+  .page-header h1 { font-size: 26px; }
+  .criterion-title { font-size: 24px; }
+}
+
+/* ── Touch Target Accessibility ── */
+.sidebar-link {
+  min-height: 44px;
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+}
+
+.topnav-link {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+}
+
+.btn {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.form-input,
+select.form-input {
+  min-height: 44px;
+}
+
+button:not(.sidebar-toggle) {
+  min-height: 44px;
+}
+
+input[type="color"],
+input[type="checkbox"],
+input[type="radio"] {
+  cursor: pointer;
+  min-height: 44px;
+  min-width: 44px;
 }
