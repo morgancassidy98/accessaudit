@@ -66,25 +66,27 @@ export default async function AuditPage({
     <>
       <div className="page-header">
         <div style={{ minWidth: 0 }}>
-          <div className="flex items-center gap-3 mb-1">
-            <Link href="/" className="text-muted" style={{ fontSize: '14px' }}>
+          <nav className="page-breadcrumb" aria-label="Breadcrumb">
+            <Link href="/">
               Dashboard
             </Link>
-            <span className="text-muted" style={{ fontSize: '14px' }}>/</span>
-            <span style={{ fontSize: '14px' }}>{audit.name}</span>
-          </div>
+            <span aria-hidden="true">/</span>
+            <span aria-current="page">{audit.name}</span>
+          </nav>
           <h1>{audit.name}</h1>
           <p className="page-subtitle">{audit.url}</p>
         </div>
-        <Link href={`/audit/${id}/report`} className="btn btn-outline">
-          View Report
-        </Link>
-        <Link href="/" className="btn btn-outline back-button flex-shrink-0">
-          <span className="back-button-content gap-2">
-            <ArrowLeftIcon size={14} />
-            <span>Back</span>
-          </span>
-        </Link>
+        <div className="page-header-actions flex gap-3">
+          <Link href={`/audit/${id}/report`} className="btn btn-outline">
+            View Report
+          </Link>
+          <Link href="/" className="btn btn-outline back-button flex-shrink-0">
+            <span className="back-button-content gap-2">
+              <ArrowLeftIcon size={14} />
+              <span>Back</span>
+            </span>
+          </Link>
+        </div>
       </div>
 
       <div className="page-body">

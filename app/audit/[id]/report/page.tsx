@@ -102,13 +102,13 @@ export default async function ReportPage({
     <>
       <div className="page-header">
         <div style={{ minWidth: 0 }}>
-          <div className="flex items-center gap-3 mb-1">
-            <Link href={`/audit/${id}`} className="text-muted" style={{ fontSize: '14px' }}>
+          <nav className="page-breadcrumb" aria-label="Breadcrumb">
+            <Link href={`/audit/${id}`}>
               {audit.name}
             </Link>
-            <span className="text-muted" style={{ fontSize: '14px' }}>/</span>
-            <span style={{ fontSize: '14px' }}>Report</span>
-          </div>
+            <span aria-hidden="true">/</span>
+            <span aria-current="page">Report</span>
+          </nav>
           <h1>Accessibility Report</h1>
           <p className="page-subtitle">{audit.url}</p>
         </div>
