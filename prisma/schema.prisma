@@ -83,6 +83,7 @@ model VerificationToken {
 
 model Audit {
   id        String   @id @default(cuid())
+  shareToken String   @unique
   name      String
   url       String
   userId    String

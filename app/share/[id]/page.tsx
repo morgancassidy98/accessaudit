@@ -7,10 +7,10 @@ export default async function SharePage({
 }: {
   params: Promise<{ id: string }>;
 }) {
-  const { id } = await params;
+  const { id: shareToken } = await params;
 
   const audit = await prisma.audit.findUnique({
-    where: { id },
+    where: { shareToken },
     include: {
       pages: {
         include: { results: true },

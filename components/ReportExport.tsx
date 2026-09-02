@@ -44,7 +44,7 @@ export function ReportExport({
   pages,
   overallStats,
 }: {
-  audit: { id: string; name: string; url: string; createdAt: Date };
+  audit: { id: string; shareToken: string; name: string; url: string; createdAt: Date };
   pages: ReportPage[];
   overallStats: OverallStats;
 }) {
@@ -257,7 +257,7 @@ const handleExport = async () => {
 };
 
   const handleCopyLink = async () => {
-    const url = `${window.location.origin}/share/${audit.id}`;
+    const url = `${window.location.origin}/share/${audit.shareToken}`;
     await navigator.clipboard.writeText(url);
     alert(`Share link copied:\n${url}`);
   };

@@ -3,6 +3,7 @@ import { prisma } from '@/lib/prisma';
 import { auth } from '@/lib/auth';
 import { wcagCriteria } from '@/lib/wcag-criteria';
 import { createReadableAuditId } from '@/lib/readable-id';
+import { randomBytes } from 'node:crypto';
 
 // GET /api/audits — list all audits with summary stats
 export async function GET() {
@@ -75,6 +76,7 @@ export async function POST(request: Request) {
     const audit = await prisma.audit.create({
       data: {
         id: readableId,
+        shareToken: randomBytes(32).toString('hex'),
         name,
         url,
         userId: session.user.id,
@@ -83,8 +85,14 @@ export async function POST(request: Request) {
 
     return NextResponse.json(audit, { status: 201 });
   } catch (error) {
+    console.error('Failed to create audit:', error);
     return NextResponse.json(
-      { error: 'Failed to create audit' },
+      {
+        error: 'Failed to create audit',
+        ...(process.env.NODE_ENV !== 'production' && {
+          details: error instanceof Error ? error.message : String(error),
+        }),
+      },
       { status: 500 }
     );
   }
