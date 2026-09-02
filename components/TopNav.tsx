@@ -30,12 +30,7 @@ export function TopNav() {
 
         <nav className="topnav-links" aria-label="Main navigation">
           {status === 'loading' && (
-            <div style={{
-              width: '80px',
-              height: '32px',
-              background: 'rgba(255,255,255,0.1)',
-              borderRadius: 'var(--radius)',
-            }} aria-hidden="true" />
+            <div className="topnav-loading" aria-hidden="true" />
           )}
 
           {status === 'authenticated' && (
@@ -51,20 +46,13 @@ export function TopNav() {
                 </Link>
               ))}
 
-              <div className="flex items-center gap-3" style={{ marginLeft: '8px' }}>
+              <div className="topnav-account-action flex items-center gap-3">
                {session?.user?.image && (
   <Link href="/profile">
-    <img
+                    <img
+      className="topnav-avatar"
       src={session.user.image}
       alt={session.user.name ?? 'User avatar'}
-      style={{
-        width: '28px',
-        height: '28px',
-        borderRadius: '50%',
-        border: '2px solid rgba(255,255,255,0.3)',
-        cursor: 'pointer',
-        transition: 'border-color var(--transition)',
-      }}
     />
   </Link>
 )}

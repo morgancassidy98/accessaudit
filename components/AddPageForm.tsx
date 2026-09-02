@@ -63,16 +63,12 @@ export function AddPageForm({
 
   return (
     <form onSubmit={handleSubmit} noValidate>
-      <div className="flex-col gap-4" style={{ display: 'flex' }}>
+      <div className="flex flex-col gap-4">
 
-        <div className="add-page-fields" style={{
-          display: 'grid',
-          gridTemplateColumns: '1fr 1fr',
-          gap: '16px',
-        }}>
+        <div className="add-page-fields">
           <div className="form-group">
             <label className="form-label" htmlFor="page-title">
-              Page Title <span aria-hidden="true" style={{ color: 'var(--color-danger)' }}>*</span>
+              Page Title <span className="required-mark" aria-hidden="true">*</span>
             </label>
             <input
               id="page-title"
@@ -88,7 +84,7 @@ export function AddPageForm({
 
           <div className="form-group">
             <label className="form-label" htmlFor="page-url">
-              Page URL <span aria-hidden="true" style={{ color: 'var(--color-danger)' }}>*</span>
+              Page URL <span className="required-mark" aria-hidden="true">*</span>
             </label>
             <input
               id="page-url"
@@ -107,14 +103,7 @@ export function AddPageForm({
           <div
             role="alert"
             aria-live="assertive"
-            style={{
-              background: 'var(--color-danger-light)',
-              border: '1px solid rgba(76,6,29,0.2)',
-              borderRadius: 'var(--radius)',
-              padding: '12px 16px',
-              color: '#6e0d2a',
-              fontSize: '14px',
-            }}
+            className="form-error-box"
           >
             {error}
           </div>

@@ -71,10 +71,9 @@ function DeletePageButton({
 
   return (
     <button
-      className="btn btn-ghost btn-sm"
+      className="btn btn-ghost btn-sm danger-text"
       onClick={() => setConfirming(true)}
       aria-label={`Remove page: ${pageTitle}`}
-      style={{ color: 'var(--color-danger)' }}
     >
       Remove
     </button>
@@ -101,22 +100,16 @@ export function PageList({
 
           {/* Title + URL */}
           <div className="flex justify-between items-start gap-4 mb-3">
-            <div style={{ minWidth: 0 }}>
-              <div style={{ fontWeight: 500, fontSize: '16px', marginBottom: '3px' }}>
+            <div className="min-w-0">
+              <div className="page-row-title">
                 {page.title}
               </div>
-              <div className="text-muted" style={{
-                fontSize: '14px',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                whiteSpace: 'nowrap',
-                maxWidth: '400px',
-              }}>
+              <div className="text-muted page-row-url">
                 {page.url}
               </div>
             </div>
             {page.lighthouseScore !== null && (
-              <div style={{
+              <div className="lighthouse-score" style={{
                 flexShrink: 0,
                 textAlign: 'center',
                 background: page.lighthouseScore >= 90
@@ -134,10 +127,10 @@ export function PageList({
                 fontSize: '14px',
                 fontWeight: 500,
               }}>
-                <div style={{ fontSize: '20px', fontWeight: 600, lineHeight: 1 }}>
+                <div className="lighthouse-score-value">
                   {page.lighthouseScore}/100
                 </div>
-                <div style={{ fontSize: '11px', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+                <div className="lighthouse-score-label">
                   Lighthouse
                 </div>
               </div>
@@ -149,7 +142,7 @@ export function PageList({
             <div>
               <div className="audit-stat-label">Progress</div>
               <div className="flex items-center gap-2">
-                <div className="progress-bar" style={{ flex: 1, minWidth: '80px' }}>
+                <div className="progress-bar progress-track">
                   <div
                     className={`progress-bar-fill ${
                       page.stats.progress === 100
@@ -159,23 +152,21 @@ export function PageList({
                     style={{ width: `${page.stats.progress}%` }}
                   />
                 </div>
-                <span style={{ fontSize: '14px', color: '#555', flexShrink: 0 }}>
+                <span className="progress-value">
                   {page.stats.progress}%
                 </span>
               </div>
             </div>
             <div>
               <div className="audit-stat-label">Tested</div>
-              <span style={{ fontSize: '15px' }}>
+              <span className="page-stat-value">
                 {page.stats.tested} / {page.stats.total}
               </span>
             </div>
             <div>
               <div className="audit-stat-label">Pass Rate</div>
               {page.stats.tested > 0 ? (
-                <span style={{
-                  fontSize: '15px',
-                  fontWeight: 500,
+                <span className="page-pass-rate" style={{
                   color: page.stats.passRate >= 90
                     ? '#2d5a1e'
                     : page.stats.passRate >= 70
@@ -219,7 +210,7 @@ export function PageList({
                 label={page.scannedAt === null ? 'Auto-scan' : 'Rescan'}
               />
               {page.scannedAt !== null && (
-                <span className="text-muted" style={{ fontSize: '13px' }}>
+                <span className="text-muted scan-time">
                   Scanned {new Date(page.scannedAt).toLocaleString([], {
                     month: 'short',
                     day: 'numeric',
@@ -237,14 +228,7 @@ export function PageList({
 
             {/* Error always renders below the button row */}
             {scanErrors[page.id] && (
-              <p
-                role="alert"
-                style={{
-                  fontSize: '13px',
-                  color: 'var(--color-danger)',
-                  marginTop: '8px',
-                }}
-              >
+              <p role="alert" className="scan-error">
                 {scanErrors[page.id]}
               </p>
             )}
@@ -298,11 +282,10 @@ export function ScanButton({
 
   return (
     <button
-      className="btn btn-outline btn-sm"
+      className="btn btn-outline btn-sm scan-button"
       onClick={handleScan}
       disabled={isScanning}
       aria-busy={isScanning}
-      style={{ alignSelf: 'center', margin: 0 }}
     >
       {isScanning ? 'Scanning…' : label}
     </button>

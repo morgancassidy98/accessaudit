@@ -474,7 +474,27 @@ a:focus-visible {
 }
 
 .topnav-account-action {
-  margin-left: 20px;
+  margin-left: 8px;
+}
+
+.topnav-loading {
+  width: 80px;
+  height: 32px;
+  border-radius: var(--radius);
+  background: rgba(255,255,255,0.1);
+}
+
+.topnav-avatar {
+  width: 28px;
+  height: 28px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: border-color var(--transition);
+}
+
+.topnav-avatar:hover {
+  border-color: rgba(255,255,255,0.75);
 }
 
 .topnav-auth summary {
@@ -619,6 +639,107 @@ a:focus-visible {
 
 .form-helper { font-size: 14px; color: #2f2f2f; line-height: 1.5; }
 .form-error  { font-size: 14px; color: var(--color-danger); }
+
+.required-mark { color: var(--color-danger); }
+
+.form-error-box {
+  padding: 12px 16px;
+  border: 1px solid rgba(76,6,29,0.2);
+  border-radius: var(--radius);
+  background: var(--color-danger-light);
+  color: #6e0d2a;
+  font-size: 14px;
+}
+
+.add-page-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.info-heading {
+  margin-bottom: 12px;
+  font-family: var(--font-display);
+  font-size: 18px;
+}
+
+.info-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-left: 20px;
+  color: #555;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.min-w-0 { min-width: 0; }
+.nowrap { white-space: nowrap; }
+.danger-text { color: var(--color-danger); }
+
+.progress-track {
+  flex: 1;
+  min-width: 80px;
+}
+
+.progress-value {
+  flex-shrink: 0;
+  color: #555;
+  font-size: 14px;
+}
+
+.audit-pass-rate,
+.page-pass-rate {
+  font-size: 15px;
+  font-weight: var(--font-weight-medium);
+}
+
+.page-row-title {
+  margin-bottom: 3px;
+  font-size: 16px;
+  font-weight: var(--font-weight-medium);
+}
+
+.page-row-url {
+  max-width: 400px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.lighthouse-score {
+  flex-shrink: 0;
+  padding: 6px 12px;
+  border-radius: var(--radius);
+  font-size: 14px;
+  font-weight: var(--font-weight-medium);
+  text-align: center;
+}
+
+.lighthouse-score-value {
+  font-size: 20px;
+  font-weight: var(--font-weight-semibold);
+  line-height: 1;
+}
+
+.lighthouse-score-label {
+  font-size: 11px;
+  letter-spacing: var(--letter-spacing-wider);
+  text-transform: uppercase;
+}
+
+.page-stat-value { font-size: 15px; }
+.scan-time { font-size: 13px; }
+.scan-error {
+  margin-top: 8px;
+  color: var(--color-danger);
+  font-size: 13px;
+}
+
+.scan-button {
+  align-self: center;
+  margin: 0;
+}
 
 /* ── Progress bar ── */
 .progress-bar {

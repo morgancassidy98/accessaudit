@@ -83,11 +83,11 @@ export default function NewAuditPage() {
             </div>
             <div className="card-body">
               <form onSubmit={handleSubmit} noValidate>
-                <div className="flex-col gap-6" style={{ display: 'flex' }}>
+                <div className="flex flex-col gap-6">
 
                   <div className="form-group">
                     <label className="form-label" htmlFor="audit-name">
-                      Audit Name <span aria-hidden="true" style={{ color: 'var(--color-danger)' }}>*</span>
+                      Audit Name <span className="required-mark" aria-hidden="true">*</span>
                     </label>
                     <input
                       id="audit-name"
@@ -108,7 +108,7 @@ export default function NewAuditPage() {
 
                   <div className="form-group">
                     <label className="form-label" htmlFor="audit-url">
-                      Website URL <span aria-hidden="true" style={{ color: 'var(--color-danger)' }}>*</span>
+                      Website URL <span className="required-mark" aria-hidden="true">*</span>
                     </label>
                     <input
                       id="audit-url"
@@ -132,14 +132,7 @@ export default function NewAuditPage() {
                       id="form-error"
                       role="alert"
                       aria-live="assertive"
-                      style={{
-                        background: 'var(--color-danger-light)',
-                        border: '1px solid rgba(76,6,29,0.2)',
-                        borderRadius: 'var(--radius)',
-                        padding: '12px 16px',
-                        color: '#6e0d2a',
-                        fontSize: '14px',
-                      }}
+                      className="form-error-box"
                     >
                       {error}
                     </div>
@@ -167,24 +160,12 @@ export default function NewAuditPage() {
           {/* Info card */}
           <div className="card mt-6">
             <div className="card-body">
-              <h3 style={{
-                fontFamily: 'var(--font-display)',
-                fontSize: '18px',
-                marginBottom: '12px',
-              }}>
+              <h3 className="info-heading">
                 What happens next?
               </h3>
-              <ol style={{
-                paddingLeft: '20px',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '10px',
-                fontSize: '14px',
-                color: '#555',
-                lineHeight: '1.6',
-              }}>
+              <ol className="info-list">
                 <li>Add the individual pages you want to audit</li>
-                <li>Run an automated scan to pre-populate Lighthouse and W3C results</li>
+                <li>Run an automated scan to pre-populate Lighthouse results</li>
                 <li>Work through the guided WCAG 2.1 checklist for each page</li>
                 <li>Export a detailed accessibility report when complete</li>
               </ol>

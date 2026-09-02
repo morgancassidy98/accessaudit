@@ -60,7 +60,7 @@ function DeleteButton({
   if (confirming) {
     return (
       <div className="flex gap-2 items-center">
-        <span className="text-muted" style={{ whiteSpace: 'nowrap' }}>
+        <span className="text-muted nowrap">
           Delete?
         </span>
         <button
@@ -84,10 +84,9 @@ function DeleteButton({
 
   return (
     <button
-      className="btn btn-ghost btn-sm"
+      className="btn btn-ghost btn-sm danger-text"
       onClick={() => setConfirming(true)}
       aria-label={`Delete audit: ${auditName}`}
-      style={{ color: 'var(--color-danger)' }}
     >
       Delete
     </button>
@@ -102,7 +101,7 @@ export function AuditTable({ audits }: { audits: AuditWithStats[] }) {
 
           {/* Top row — name + status */}
           <div className="flex justify-between items-center gap-4 mb-3">
-            <div style={{ minWidth: 0 }}>
+            <div className="min-w-0">
               <div className="audit-row-name">{audit.name}</div>
               <div className="audit-row-url">{audit.url}</div>
             </div>
@@ -116,7 +115,7 @@ export function AuditTable({ audits }: { audits: AuditWithStats[] }) {
             <div className="audit-stat">
               <div className="audit-stat-label">Progress</div>
               <div className="flex items-center gap-2">
-                <div className="progress-bar" style={{ flex: 1, minWidth: '80px' }}>
+                <div className="progress-bar progress-track">
                   <div
                     className={`progress-bar-fill ${
                       audit.stats.progress === 100
@@ -128,7 +127,7 @@ export function AuditTable({ audits }: { audits: AuditWithStats[] }) {
                     style={{ width: `${audit.stats.progress}%` }}
                   />
                 </div>
-                <span style={{ fontSize: '14px', color: '#555', flexShrink: 0 }}>
+                <span className="progress-value">
                   {audit.stats.progress}%
                 </span>
               </div>
@@ -137,9 +136,7 @@ export function AuditTable({ audits }: { audits: AuditWithStats[] }) {
             <div className="audit-stat">
               <div className="audit-stat-label">Pass Rate</div>
               {audit.stats.tested > 0 ? (
-                <span style={{
-                  fontSize: '15px',
-                  fontWeight: 500,
+                <span className="audit-pass-rate" style={{
                   color: audit.stats.passRate >= 90
                     ? '#2d5a1e'
                     : audit.stats.passRate >= 70
