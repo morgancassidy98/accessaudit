@@ -61,7 +61,12 @@ export default function NewAuditPage() {
   return (
     <>
       <div className="page-header">
-        <div>
+        <div className="min-w-0">
+          <nav className="page-breadcrumb" aria-label="Breadcrumb">
+            <Link href="/">Dashboard</Link>
+            <span aria-hidden="true">/</span>
+            <span aria-current="page">New Audit</span>
+          </nav>
           <h1>New Audit</h1>
           <p className="page-subtitle">
             WCAG Accessibility Audit Tracker and Reporting Tool

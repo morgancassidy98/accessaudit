@@ -33,23 +33,6 @@ export default async function ProfilePage() {
   const user = await getProfileData(session.user.id);
   if (!user) redirect('/login');
 
-  // Compute overall stats
-  const allResults = user.audits.flatMap((a) =>
-    a.pages.flatMap((p) => p.results)
-  );
-  const totalAudits   = user.audits.length;
-  const totalPages    = user.audits.reduce((acc, a) => acc + a.pages.length, 0);
-  const totalTested   = allResults.filter((r) => r.status !== 'untested').length;
-  const totalPassed   = allResults.filter((r) => r.status === 'pass').length;
-  const totalFailed   = allResults.filter((r) => r.status === 'fail').length;
-  const totalCriteria = totalPages * wcagCriteria.length;
-  const overallProgress = totalCriteria > 0
-    ? Math.round((totalTested / totalCriteria) * 100)
-    : 0;
-  const overallPassRate = totalTested > 0
-    ? Math.round((totalPassed / totalTested) * 100)
-    : 0;
-
   // Recent audits — last 5
   const recentAudits = user.audits.slice(0, 5).map((audit) => {
     const results = audit.pages.flatMap((p) => p.results);
@@ -74,12 +57,14 @@ export default async function ProfilePage() {
   return (
     <>
       <div className="page-header">
-        <div className="flex items-center gap-3" style={{ minWidth: 0 }}>
-          <Link href="/" className="text-muted" style={{ fontSize: '14px' }}>
+        <div className="min-w-0">
+          <nav className="page-breadcrumb" aria-label="Breadcrumb">
+            <Link href="/">
             Dashboard
-          </Link>
-          <span className="text-muted" style={{ fontSize: '14px' }}>/</span>
-          <span style={{ fontSize: '14px' }}>Profile</span>
+            </Link>
+            <span aria-hidden="true">/</span>
+            <span aria-current="page">Profile</span>
+          </nav>
         </div>
       </div>
 
@@ -120,49 +105,6 @@ export default async function ProfilePage() {
     </div>
   </div>
 </div>
-
-        {/* Stats */}
-        <div className="stat-grid mb-6">
-          <div className="stat-card">
-            <div className="stat-card-value">{totalAudits}</div>
-            <div className="stat-card-label">Total Audits</div>
-          </div>
-          <div className="stat-card">
-            <div className="stat-card-value">{totalPages}</div>
-            <div className="stat-card-label">Pages Audited</div>
-          </div>
-          <div className="stat-card">
-            <div className="stat-card-value">{overallProgress > 0 ? `${overallProgress}%` : '—'}</div>
-            <div className="stat-card-label">Overall Progress</div>
-          </div>
-          <div className="stat-card">
-            <div className="stat-card-value"
-              style={{
-                color: overallPassRate >= 90 ? '#2d5a1e'
-                  : overallPassRate >= 70 ? '#4a3a10'
-                  : overallPassRate > 0 ? 'var(--color-danger)'
-                  : 'var(--color-primary)',
-              }}
-            >
-              {overallPassRate > 0 ? `${overallPassRate}%` : '—'}
-            </div>
-            <div className="stat-card-label">Overall Pass Rate</div>
-          </div>
-          <div className="stat-card">
-            <div className="stat-card-value" style={{ color: '#2d5a1e' }}>
-              {totalPassed}
-            </div>
-            <div className="stat-card-label">Criteria Passed</div>
-          </div>
-          <div className="stat-card">
-            <div className="stat-card-value"
-              style={{ color: totalFailed > 0 ? 'var(--color-danger)' : '#2d5a1e' }}
-            >
-              {totalFailed}
-            </div>
-            <div className="stat-card-label">Criteria Failed</div>
-          </div>
-        </div>
 
         {/* Recent audits */}
         <div className="card mb-6">
