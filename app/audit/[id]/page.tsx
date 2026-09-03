@@ -7,6 +7,7 @@ import { EditAuditForm } from '@/components/EditAuditForm';
 import { PageDiscovery } from '@/components/PageDiscovery';
 import { PageList } from '@/components/PageList';
 import { ArrowLeftIcon, FileIcon } from '@/components/icons';
+import { DuplicateButton } from '@/components/DuplicateButton';
 import { getAuthenticatedUserId } from '@/lib/ownership';
 
 async function getAudit(id: string, userId: string) {
@@ -82,6 +83,7 @@ export default async function AuditPage({
           <Link href={`/audit/${id}/report`} className="btn btn-outline">
             View Report
           </Link>
+          <DuplicateButton auditId={audit.id} />
           <EditAuditForm
             auditId={audit.id}
             initialName={audit.name}

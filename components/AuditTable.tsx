@@ -93,6 +93,34 @@ function DeleteButton({
   );
 }
 
+function DuplicateButton({ auditId }: { auditId: string }) {
+  const router = useRouter();
+  const [isDuplicating, setIsDuplicating] = useState(false);
+
+  const handleDuplicate = async () => {
+    setIsDuplicating(true);
+    try {
+      const response = await fetch(`/api/audits/${auditId}/duplicate`, { method: 'POST' });
+      if (!response.ok) throw new Error('Failed to duplicate');
+      const data = await response.json();
+      router.push(`/audit/${data.id}`);
+    } catch {
+      setIsDuplicating(false);
+    }
+  };
+
+  return (
+    <button
+      className="btn btn-ghost btn-sm"
+      onClick={handleDuplicate}
+      disabled={isDuplicating}
+      aria-busy={isDuplicating}
+    >
+      {isDuplicating ? 'Duplicating…' : 'Duplicate'}
+    </button>
+  );
+}
+
 export function AuditTable({ audits }: { audits: AuditWithStats[] }) {
   return (
     <div className="audit-list">
@@ -178,6 +206,7 @@ export function AuditTable({ audits }: { audits: AuditWithStats[] }) {
   >
     View Report
   </Link>
+            <DuplicateButton auditId={audit.id} />
             <DeleteButton auditId={audit.id} auditName={audit.name} />
           </div>
 
