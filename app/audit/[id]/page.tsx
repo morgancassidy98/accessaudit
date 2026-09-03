@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { prisma } from '@/lib/prisma';
 import { wcagCriteria } from '@/lib/wcag-criteria';
 import { AddPageForm } from '@/components/AddPageForm';
+import { EditAuditForm } from '@/components/EditAuditForm';
 import { PageDiscovery } from '@/components/PageDiscovery';
 import { PageList } from '@/components/PageList';
 import { ArrowLeftIcon, FileIcon } from '@/components/icons';
@@ -81,6 +82,11 @@ export default async function AuditPage({
           <Link href={`/audit/${id}/report`} className="btn btn-outline">
             View Report
           </Link>
+          <EditAuditForm
+            auditId={audit.id}
+            initialName={audit.name}
+            initialUrl={audit.url}
+          />
           <Link href="/" className="btn btn-outline back-button flex-shrink-0">
             <span className="back-button-content gap-2">
               <ArrowLeftIcon size={14} />

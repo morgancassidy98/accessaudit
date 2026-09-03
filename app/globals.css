@@ -251,6 +251,7 @@ select.form-input {
   gap: 16px;
   flex-shrink: 0;
   width: 100%;
+  position: relative;
 }
 
 .page-header h1 { font-size: 30px; }
@@ -846,6 +847,7 @@ a:focus-visible {
   border-bottom: 1px solid var(--color-border);
   transition: background var(--transition-fast);
   min-width: 0;
+  position: relative;
 }
 
 .page-row:last-child { border-bottom: none; }
@@ -1002,6 +1004,72 @@ a:focus-visible {
 }
 
 .page-manual-add h3 { margin-bottom: 0; }
+
+.edit-audit-control,
+.edit-page-control {
+  position: relative;
+}
+
+.edit-page-control {
+  flex: 0 0 auto;
+}
+
+.edit-audit-trigger {
+  width: 100%;
+}
+
+.edit-audit-form,
+.edit-page-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 20px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-lg);
+  text-align: left;
+}
+
+.edit-audit-form {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  z-index: 120;
+  width: min(720px, calc(100vw - 32px));
+}
+
+.edit-page-form {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 40;
+  width: min(680px, calc(100vw - 40px));
+}
+
+.edit-audit-form-header,
+.edit-page-form-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.edit-audit-form-header h2 { font-size: 22px; }
+.edit-page-form-header h3 { font-size: 20px; }
+
+.edit-audit-fields,
+.edit-page-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.edit-audit-actions,
+.edit-page-actions {
+  display: flex;
+  justify-content: flex-end;
+}
 
 /* ── Checklist Shell ── */
 .checklist-shell {
@@ -1713,6 +1781,16 @@ a:focus-visible {
     flex-direction: column;
   }
 
+  .edit-audit-fields,
+  .edit-page-fields {
+    grid-template-columns: 1fr;
+  }
+
+  .edit-audit-form,
+  .edit-page-form {
+    width: 100%;
+  }
+
   .page-discovery-intro > .btn,
   .page-discovery-results-header > .btn {
     width: 100%;
@@ -2035,6 +2113,10 @@ input[type="radio"] {
     width: 100%;
   }
 
+  .page-header-actions > .edit-audit-control {
+    width: 100%;
+  }
+
   .page-header > .btn {
     white-space: normal;
   }
@@ -2065,6 +2147,14 @@ input[type="radio"] {
 
   .page-row-actions > .page-remove-confirm {
     flex: 1 1 100%;
+  }
+
+  .page-row-actions > .edit-page-control {
+    flex: 1 1 140px;
+  }
+
+  .edit-page-control > .btn {
+    width: 100%;
   }
 
   .checklist-topbar {

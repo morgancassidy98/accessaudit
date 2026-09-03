@@ -68,7 +68,24 @@ export async function PUT(
     if (!await getOwnedAudit(id, userId)) {
       return NextResponse.json({ error: 'Audit not found' }, { status: 404 });
     }
-    const { name, url } = await request.json();
+    const body: unknown = await request.json().catch(() => null);
+    if (!body || typeof body !== 'object') {
+      return NextResponse.json({ error: 'Audit name and URL are required' }, { status: 400 });
+    }
+
+    const input = body as { name?: unknown; url?: unknown };
+    const name = typeof input.name === 'string' ? input.name.trim() : '';
+    const url = typeof input.url === 'string' ? input.url.trim() : '';
+    if (!name || !url) {
+      return NextResponse.json({ error: 'Audit name and URL are required' }, { status: 400 });
+    }
+
+    try {
+      const parsedUrl = new URL(url);
+      if (!['http:', 'https:'].includes(parsedUrl.protocol)) throw new Error();
+    } catch {
+      return NextResponse.json({ error: 'Please provide a valid HTTP or HTTPS URL' }, { status: 400 });
+    }
 
     const audit = await prisma.audit.update({
       where: { id },

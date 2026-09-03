@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { EditPageForm } from './EditPageForm';
 
 type PageWithStats = {
   id: string;
@@ -208,6 +209,12 @@ export function PageList({
                 pageUrl={page.url}
                 onError={(msg) => setError(page.id, msg)}
                 label={page.scannedAt === null ? 'Auto-scan' : 'Rescan'}
+              />
+              <EditPageForm
+                auditId={auditId}
+                pageId={page.id}
+                initialTitle={page.title}
+                initialUrl={page.url}
               />
               {page.scannedAt !== null && (
                 <span className="text-muted scan-time">
