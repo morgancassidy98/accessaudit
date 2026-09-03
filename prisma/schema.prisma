@@ -13,6 +13,7 @@ model Page {
   audit           Audit     @relation(fields: [auditId], references: [id], onDelete: Cascade)
   url             String
   title           String
+  sortOrder       Int       @default(0)
   lighthouseScore Float?
   lighthouseData  String?
   w3cErrors       Int?

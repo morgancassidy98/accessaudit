@@ -4,7 +4,8 @@ import { lighthouseAuditMap } from '@/lib/wcag-criteria';
 import { getAuthenticatedUserId } from '@/lib/ownership';
 import { isScanRequest, parseScanUrl } from '@/lib/scan-validation';
 
-export const maxDuration = 10;
+export const maxDuration = 30;
+const SCAN_TIMEOUT_MS = 25_000;
 
 type LighthouseAudit = {
   score: number | null;
@@ -54,10 +55,9 @@ export async function POST(
     const apiKey = process.env.PAGESPEED_API_KEY ?? process.env.NEXT_PUBLIC_PAGESPEED_API_KEY ?? '';
     const apiUrl = `https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${encodeURIComponent(scanUrl)}&category=accessibility&strategy=mobile${apiKey ? `&key=${apiKey}` : ''}`;
 
-    // Use a slightly longer timeout than the previous 9s to avoid aborting slow
-    // PageSpeed responses while still keeping the request bounded.
+    // Keep the request bounded while allowing PageSpeed enough time to audit slow sites.
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 15000);
+    const timeout = setTimeout(() => controller.abort(), SCAN_TIMEOUT_MS);
 
     let lighthouseData: LighthouseAudits | null = null;
     let score: number | null = null;
@@ -79,6 +79,13 @@ export async function POST(
       }
 
       const data = await lighthouseRes.json() as PageSpeedResponse;
+      if (!data.lighthouseResult?.audits || !data.lighthouseResult.categories?.accessibility) {
+        return NextResponse.json(
+          { error: 'PageSpeed returned an incomplete Lighthouse result.' },
+          { status: 502 }
+        );
+      }
+
       score = Math.round(
         (data.lighthouseResult?.categories?.accessibility?.score ?? 0) * 100
       );
@@ -92,7 +99,7 @@ export async function POST(
       const message = err instanceof Error ? err.message : 'Unknown error';
       const isAbort = message === 'This operation was aborted' || err instanceof DOMException && err.name === 'AbortError';
       scanError = isAbort
-        ? 'Lighthouse scan timed out after 15 seconds. The page may be slow to load, blocked, or the PageSpeed API may be delayed or unavailable.'
+        ? 'Lighthouse scan timed out after 25 seconds. The page may be slow to load, blocked, or the PageSpeed API may be delayed or unavailable.'
         : `Lighthouse scan failed — the page may be blocked or the PageSpeed API is unavailable. Details: ${message}`;
       return NextResponse.json({ error: scanError }, { status: 502 });
     }
@@ -145,8 +152,14 @@ export async function POST(
     });
 
   } catch (error) {
+    console.error('Failed to complete scan:', error);
     return NextResponse.json(
-      { error: 'Scan failed' },
+      {
+        error: 'Scan failed',
+        ...(process.env.NODE_ENV !== 'production' && {
+          details: error instanceof Error ? error.message : String(error),
+        }),
+      },
       { status: 500 }
     );
   }

@@ -8,6 +8,19 @@ type Candidate = {
   title: string;
 };
 
+async function readApiResponse(response: Response): Promise<Record<string, unknown>> {
+  const contentType = response.headers.get('content-type') ?? '';
+  if (!contentType.includes('application/json')) {
+    if (response.redirected && new URL(response.url).pathname === '/login') {
+      throw new Error('Your session has expired. Please sign in again.');
+    }
+    throw new Error(`The server returned an unexpected response (${response.status}).`);
+  }
+
+  const data: unknown = await response.json().catch(() => null);
+  return data && typeof data === 'object' ? data as Record<string, unknown> : {};
+}
+
 export function PageDiscovery({ auditId }: { auditId: string }) {
   const router = useRouter();
   const [candidates, setCandidates] = useState<Candidate[]>([]);
@@ -24,10 +37,12 @@ export function PageDiscovery({ auditId }: { auditId: string }) {
     setSelected(new Set());
     try {
       const response = await fetch(`/api/audits/${auditId}/discover`, { method: 'POST' });
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.error ?? 'Unable to discover pages.');
-      setCandidates(data.candidates ?? []);
-      setSource(data.source ?? null);
+      const data = await readApiResponse(response);
+      if (!response.ok) {
+        throw new Error(String(data.error ?? 'Unable to discover pages.'));
+      }
+      setCandidates(Array.isArray(data.candidates) ? data.candidates as Candidate[] : []);
+      setSource(data.source === 'sitemap' || data.source === 'homepage' ? data.source : null);
     } catch (discoveryError) {
       setError(discoveryError instanceof Error ? discoveryError.message : 'Unable to discover pages.');
     } finally {
@@ -60,9 +75,9 @@ export function PageDiscovery({ auditId }: { auditId: string }) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ pages }),
       });
+      const data = await readApiResponse(response);
       if (!response.ok) {
-        const data = await response.json().catch(() => null);
-        throw new Error(data?.details ?? data?.error ?? 'Failed to add selected pages.');
+        throw new Error(String(data.details ?? data.error ?? 'Failed to add selected pages.'));
       }
       setCandidates((current) => current.filter((candidate) => !selected.has(candidate.url)));
       setSelected(new Set());

@@ -13,7 +13,7 @@ async function getAudit(id: string, userId: string) {
     where: { id, userId },
     include: {
       pages: {
-        orderBy: { createdAt: 'asc' },
+        orderBy: { sortOrder: 'asc' },
         include: { results: true },
       },
     },

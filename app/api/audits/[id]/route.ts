@@ -17,7 +17,7 @@ export async function GET(
       where: { id, userId },
       include: {
         pages: {
-          orderBy: { createdAt: 'asc' },
+          orderBy: { sortOrder: 'asc' },
           include: {
             results: true,
           },

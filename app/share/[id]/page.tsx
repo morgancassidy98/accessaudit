@@ -14,7 +14,7 @@ export default async function SharePage({
     include: {
       pages: {
         include: { results: true },
-        orderBy: { createdAt: 'asc' },
+        orderBy: { sortOrder: 'asc' },
       },
     },
   });

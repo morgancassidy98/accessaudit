@@ -268,7 +268,7 @@ export function ScanButton({
 
       const data = await res.json().catch(() => null);
       if (!res.ok) {
-        throw new Error(data?.error ?? 'Scan failed');
+        throw new Error(data?.details ?? data?.error ?? 'Scan failed');
       }
 
       setIsScanning(false);

@@ -19,7 +19,7 @@ export async function GET(
 
     const pages = await prisma.page.findMany({
       where: { auditId: id },
-      orderBy: { createdAt: 'asc' },
+      orderBy: { sortOrder: 'asc' },
       include: { results: true },
     });
 
@@ -84,18 +84,29 @@ export async function POST(
 
       const createdPages = await prisma.$transaction(async (tx) => {
         const [existingPages, existingIds] = await Promise.all([
-          tx.page.findMany({ where: { auditId: id }, select: { url: true } }),
+          tx.page.findMany({ where: { auditId: id }, select: { url: true, sortOrder: true } }),
           tx.page.findMany({ select: { id: true } }),
         ]);
         const existingUrls = new Set(existingPages.map((page) => page.url));
         const usedIds = existingIds.map((page) => page.id);
+        let nextSortOrder = existingPages.reduce(
+          (highest, page) => Math.max(highest, page.sortOrder),
+          -1
+        ) + 1;
         const pagesToCreate = [];
 
         for (const page of uniquePages) {
           if (existingUrls.has(page.url)) continue;
           const pageId = createReadableAuditId(page.title, usedIds);
           usedIds.push(pageId);
-          pagesToCreate.push({ id: pageId, auditId: id, url: page.url, title: page.title });
+          pagesToCreate.push({
+            id: pageId,
+            auditId: id,
+            url: page.url,
+            title: page.title,
+            sortOrder: nextSortOrder,
+          });
+          nextSortOrder += 1;
           existingUrls.add(page.url);
         }
 
@@ -130,6 +141,11 @@ export async function POST(
     const existingPageIds = await prisma.page.findMany({
       select: { id: true },
     });
+    const lastPage = await prisma.page.findFirst({
+      where: { auditId: id },
+      orderBy: { sortOrder: 'desc' },
+      select: { sortOrder: true },
+    });
 
     const readablePageId = createReadableAuditId(title, existingPageIds.map((page) => page.id));
 
@@ -140,6 +156,7 @@ export async function POST(
         auditId: id,
         url,
         title,
+        sortOrder: (lastPage?.sortOrder ?? -1) + 1,
         results: {
           create: wcagCriteria.map((criterion) => ({
             criterionId: criterion.id,
