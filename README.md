@@ -1,18 +1,22 @@
 # Audit Ally
 
-Audit Ally is a Next.js app for tracking and reporting WCAG accessibility audits across multiple pages and audits. It helps teams capture findings for each WCAG criterion, run Lighthouse-based accessibility checks, review contrast issues, and export a shareable audit report.
+Audit Ally is an authenticated Next.js app for tracking and reporting WCAG accessibility audits across multiple websites and pages. It combines guided manual testing with Lighthouse accessibility checks, page discovery, contrast checking, and exportable reports.
 
 ## Features
 
 - Create and manage accessibility audits for a website or digital product
-- Add pages to each audit and track their status over time
+- Discover pages from a sitemap, sitemap index, robots.txt, or homepage links
+- Review discovered pages and add them individually or in bulk
+- Add pages manually and track their status over time
 - Review a WCAG checklist grouped by criterion and level
-- Mark criteria as pass, fail, N/A, or untested with notes
+- Mark criteria as pass, fail, N/A, or untested with severity and notes
+- Use keyboard shortcuts while working through the checklist
 - Run automated Lighthouse accessibility scans for individual pages
 - View Lighthouse scores and related audit details for matching criteria
 - Check foreground/background color contrast against WCAG thresholds
-- Generate a report summary and exportable report output
-- Share completed audits via a public report page
+- Generate a report summary and download a PDF report
+- Copy a public report link protected by a random share token
+- Sign in with GitHub or Google
 
 ## Tech Stack
 
@@ -21,7 +25,8 @@ Audit Ally is a Next.js app for tracking and reporting WCAG accessibility audits
 - TypeScript
 - Prisma ORM
 - PostgreSQL
-- Lighthouse PageSpeed accessibility checks
+- Google PageSpeed Insights Lighthouse accessibility checks
+- Vitest
 
 ## Project Structure
 
@@ -45,15 +50,27 @@ Audit Ally is a Next.js app for tracking and reporting WCAG accessibility audits
 npm install
 ```
 
-2. Create a `.env` file in the project root and add your database URL:
+2. Create a `.env.local` file in the project root. Add your PostgreSQL connection string and authentication settings:
 
 ```bash
 PRISMA_DATABASE_URL="postgresql://postgres:postgres@localhost:5432/audit_ally?schema=public"
+NEXTAUTH_SECRET="replace-with-a-long-random-secret"
+NEXTAUTH_URL="http://localhost:3000"
+GITHUB_ID="your-github-oauth-client-id"
+GITHUB_SECRET="your-github-oauth-client-secret"
+GOOGLE_CLIENT_ID="your-google-oauth-client-id"
+GOOGLE_CLIENT_SECRET="your-google-oauth-client-secret"
 ```
 
-> Replace the example value with your own PostgreSQL connection string.
+Replace the example values with your own credentials. Configure the GitHub and Google OAuth callback URLs for your local and deployed environments. Environment files are ignored by Git and should never be committed.
 
-3. Generate Prisma Client and apply the schema:
+For Lighthouse scans, optionally add a server-only PageSpeed API key:
+
+```bash
+PAGESPEED_API_KEY="your-pagespeed-api-key"
+```
+
+3. Generate Prisma Client and apply migrations:
 
 ```bash
 npm run db:generate
@@ -75,6 +92,7 @@ npm run dev        # Start the Next.js dev server
 npm run build      # Build production assets
 npm run start      # Start the production server
 npm run lint       # Run ESLint
+npm test           # Run the Vitest test suite
 npm run db:migrate # Apply Prisma migrations
 npm run db:generate # Generate Prisma Client
 npm run db:studio  # Open Prisma Studio
@@ -83,17 +101,21 @@ npm run db:reset   # Reset the database and rerun migrations
 
 ## Typical Workflow
 
-1. Create a new audit from the dashboard.
-2. Add the base website URL and pages to review.
-3. Open an audit page to evaluate WCAG criteria one by one.
-4. Use Lighthouse scans when available to supplement manual review.
-5. Record findings, notes, and status for each criterion.
-6. Review the report page to summarize compliance and export results.
+1. Sign in with GitHub or Google.
+2. Create a new audit with its name and base website URL.
+3. Use automatic page discovery. Audit Ally checks sitemap sources first and falls back to same-origin homepage links when no sitemap is available.
+4. Review the discovered candidates and select individual pages or all candidates to add. You can also add a page manually.
+5. Open a page to evaluate WCAG criteria one by one, using the guided instructions and optional keyboard shortcuts.
+6. Run a Lighthouse scan for a page when the target is publicly accessible.
+7. Record findings, severity, notes, and status for each criterion.
+8. Review the report, download a PDF, or copy a tokenized public share link.
 
 ## Database Notes
 
 This project uses Prisma with PostgreSQL. The schema is defined in `prisma/schema.prisma` and the connection string is loaded from `PRISMA_DATABASE_URL`.
 
+Use `npm run db:migrate` during development and `npx prisma migrate deploy` in production. The project includes migrations for authentication, public share tokens, and persistent page ordering.
+
 ## Notes
 
-The app is designed for accessibility review workflows rather than a fully automated scan-only solution. It is best used as a guided audit tracker for manual testing, automated checks, and summary reporting.
+The app is designed for accessibility review workflows rather than a fully automated scan-only solution. Lighthouse scans supplement, but do not replace, manual testing. Automatic page discovery is intentionally limited to same-origin URLs and up to 100 candidates per discovery request.
