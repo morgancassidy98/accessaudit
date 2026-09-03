@@ -1039,12 +1039,27 @@ a:focus-visible {
   width: min(720px, calc(100vw - 32px));
 }
 
-.edit-page-form {
-  position: absolute;
-  top: calc(100% + 8px);
+.edit-page-form-portal {
+  position: fixed;
+  top: 0;
+  left: 0;
   right: 0;
-  z-index: 40;
-  width: min(680px, calc(100vw - 40px));
+  bottom: 0;
+  z-index: 50;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+  overflow-y: auto;
+}
+
+.edit-page-form-portal .edit-page-form {
+  position: relative;
+  top: auto;
+  right: auto;
+  width: 100%;
+  max-width: 720px;
+  flex-shrink: 0;
 }
 
 .edit-audit-form-header,
@@ -1791,6 +1806,10 @@ a:focus-visible {
     width: 100%;
   }
 
+  .edit-page-form-portal {
+    padding: 8px;
+  }
+
   .page-discovery-intro > .btn,
   .page-discovery-results-header > .btn {
     width: 100%;
@@ -2151,6 +2170,7 @@ input[type="radio"] {
 
   .page-row-actions > .edit-page-control {
     flex: 1 1 140px;
+    width: 100%;
   }
 
   .edit-page-control > .btn {
