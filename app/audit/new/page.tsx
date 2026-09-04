@@ -89,6 +89,13 @@ export default function NewAuditPage() {
             <div className="card-body">
               <form onSubmit={handleSubmit} noValidate>
                 <div className="flex flex-col gap-6">
+                  {isSubmitting && (
+                    <div className="new-audit-loading" role="status" aria-live="polite">
+                      <span className="sr-only">Creating audit</span>
+                      <div className="skeleton skeleton-loading-line" aria-hidden="true" />
+                      <div className="skeleton skeleton-loading-line skeleton-loading-line-short" aria-hidden="true" />
+                    </div>
+                  )}
 
                   <div className="form-group">
                     <label className="form-label" htmlFor="audit-name">
